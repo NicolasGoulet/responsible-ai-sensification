@@ -65,6 +65,7 @@ def inspect_live(prompt, model, tokenizer, sae, layer, top_k=10):
     mean_acts = acts_nobos.mean(dim=0)                        # (d_sae,)
     topk_indices = mean_acts.topk(top_k).indices              # (top_k,)
 
+    print(f"\nPrompt: {prompt!r}")
     print(f"\n=== Top-{top_k} Active Features (layer {layer}) ===")
     for rank, feat_idx in enumerate(topk_indices.tolist(), start=1):
         mean_val = mean_acts[feat_idx].item()
