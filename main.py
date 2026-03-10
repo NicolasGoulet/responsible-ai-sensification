@@ -1,13 +1,131 @@
+import json
+import gzip
+import re
+import requests
+from pathlib import Path
+
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from huggingface_hub import hf_hub_download
 from safetensors.torch import load_file
+from pydantic import BaseModel
 import torch
 import torch.nn as nn
-import math
 
 torch.set_grad_enabled(False)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+
+# ---------------------------------------------------------------------------
+# Pydantic models
+# ---------------------------------------------------------------------------
+
+class ActiveFeature(BaseModel):
+    index: int
+    activation: float
+    description: str | None  # None if not found in Neuronpedia
+
+
+class TokenAnalysis(BaseModel):
+    token_id: int
+    token: str
+    l0: int                          # total number of active features (activation > 0)
+    active_features: list[ActiveFeature]
+
+
+class GenerationAnalysis(BaseModel):
+    prompt: str
+    model_id: str
+    layer: int
+    sae_width: str                   # e.g. "65k"
+    generated_tokens: list[TokenAnalysis]
+    full_generated_text: str         # decoded full generation (all tokens joined)
+
+
+class NeuronpediaScope(BaseModel):
+    model_id: str
+    layer: int
+    width: str                       # e.g. "65k"
+    explanations: dict[int, str]     # feature_index -> description string
+
+
+# ---------------------------------------------------------------------------
+# Neuronpedia download layer
+# ---------------------------------------------------------------------------
+
+NEURONPEDIA_S3 = "https://neuronpedia-datasets.s3.us-east-1.amazonaws.com"
+CACHE_DIR = Path("neuronpedia_cache")
+
+
+def list_available_scopes(model_id: str) -> list[str]:
+    """Return list of scope IDs available on Neuronpedia for model_id.
+
+    Example return value: ['7-gemmascope-2-res-16k', '22-gemmascope-2-res-65k', ...]
+    """
+    url = (
+        f"{NEURONPEDIA_S3}/?list-type=2"
+        f"&prefix=v1/{model_id}/&delimiter=/"
+    )
+    resp = requests.get(url)
+    resp.raise_for_status()
+    prefixes = re.findall(r"<Prefix>v1/[^/]+/([^/]+)/</Prefix>", resp.text)
+    return [p for p in prefixes if p != model_id]
+
+
+def download_neuronpedia_explanations(
+    model_id: str,
+    layer: int,
+    width: str,
+) -> NeuronpediaScope:
+    """Download all feature explanation descriptions for the given scope.
+
+    Uses a local cache at neuronpedia_cache/{model_id}_{layer}_{width}.jsonl.
+    Returns a NeuronpediaScope with explanations dict populated.
+    """
+    CACHE_DIR.mkdir(exist_ok=True)
+    cache_file = CACHE_DIR / f"{model_id}_{layer}_{width}.jsonl"
+
+    explanations: dict[int, str] = {}
+
+    if cache_file.exists():
+        with open(cache_file) as f:
+            for line in f:
+                entry = json.loads(line)
+                explanations[entry["index"]] = entry["description"]
+        return NeuronpediaScope(
+            model_id=model_id, layer=layer, width=width,
+            explanations=explanations,
+        )
+
+    # Discover batch count
+    scope_id = f"{layer}-gemmascope-2-res-{width}"
+    prefix = f"v1/{model_id}/{scope_id}/explanations/"
+    list_url = (
+        f"{NEURONPEDIA_S3}/?list-type=2&prefix={prefix}&delimiter=/"
+    )
+    resp = requests.get(list_url)
+    resp.raise_for_status()
+    batch_keys = re.findall(r"<Key>(" + re.escape(prefix) + r"batch-\d+\.jsonl\.gz)</Key>", resp.text)
+
+    with open(cache_file, "w") as out:
+        for key in sorted(batch_keys, key=lambda k: int(k.split("batch-")[1].split(".")[0])):
+            url = f"{NEURONPEDIA_S3}/{key}"
+            data = requests.get(url).content
+            for line in gzip.decompress(data).decode().splitlines():
+                entry = json.loads(line)
+                idx = int(entry["index"])
+                desc = entry["description"]
+                explanations[idx] = desc
+                out.write(json.dumps({"index": idx, "description": desc}) + "\n")
+
+    return NeuronpediaScope(
+        model_id=model_id, layer=layer, width=width,
+        explanations=explanations,
+    )
+
+
+# ---------------------------------------------------------------------------
+# SAE
+# ---------------------------------------------------------------------------
 
 class JumpReluSAE(nn.Module):
     def __init__(self, w_enc, b_enc, threshold, w_dec, b_dec):
@@ -39,69 +157,137 @@ def load_sae(layer=22, width="65k", l0="medium", category="resid_post", device=d
     return sae.to(device).eval()
 
 
-def get_residual_stream(model, layer_idx, input_ids) -> torch.Tensor:
-    captured = []
+# ---------------------------------------------------------------------------
+# Generation-time inspection
+# ---------------------------------------------------------------------------
 
-    def hook_fn(_module, _input, output):
-        captured.append(output[0].detach())
-        hook.remove()
+def inspect_live(
+    prompt: str,
+    model,
+    tokenizer,
+    sae: JumpReluSAE,
+    layer: int,
+    neuronpedia: NeuronpediaScope,
+    max_new_tokens: int = 200,
+) -> GenerationAnalysis:
+    """Generate tokens autoregressively and capture SAE feature activations at each step.
 
-    hook = model.model.layers[layer_idx].register_forward_hook(hook_fn)
-    model(input_ids)
-    return captured[0].squeeze(0)  # (seq_len, d_model)
+    For each generated token (excluding the prompt), records:
+    - The token string and id
+    - All active SAE features (activation > 0) with their Neuronpedia description
+    - L0: total number of active features for that token position
 
-
-def inspect_live(prompt, model, tokenizer, sae, layer, top_k=10):
+    Stops at EOS or when max_new_tokens is reached.
+    """
     inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
     input_ids = inputs["input_ids"].to(device)
-    tokens = tokenizer.convert_ids_to_tokens(input_ids[0])
 
-    residual = get_residual_stream(model, layer, input_ids)   # (seq_len, d_model)
-    sae_acts = sae.encode(residual.float())                   # (seq_len, d_sae)
+    token_analyses: list[TokenAnalysis] = []
 
-    tokens_nobos = tokens[1:]
-    acts_nobos = sae_acts[1:]                                 # (seq_len-1, d_sae)
+    for _ in range(max_new_tokens):
+        # Capture residual stream at the last token position via a one-shot hook
+        captured: list[torch.Tensor] = []
 
-    mean_acts = acts_nobos.mean(dim=0)                        # (d_sae,)
-    topk_indices = mean_acts.topk(top_k).indices              # (top_k,)
+        def hook_fn(_module, _input, output):
+            captured.append(output[0].detach())
 
-    print(f"\nPrompt: {prompt!r}")
-    print(f"\n=== Top-{top_k} Active Features (layer {layer}) ===")
-    for rank, feat_idx in enumerate(topk_indices.tolist(), start=1):
-        mean_val = mean_acts[feat_idx].item()
-        print(f"  #{rank:<3} Feature {feat_idx:>6}  mean_act={mean_val:.4f}")
+        hook = model.model.layers[layer].register_forward_hook(hook_fn)
+        outputs = model(input_ids)
+        hook.remove()
 
-    print()
-    seq_len = acts_nobos.shape[0]
-    n_top_tokens = max(1, math.ceil(0.1 * seq_len))
+        # residual at the last (newly appended) position: shape (d_model,)
+        residual_last = captured[0][0, -1, :]  # (d_model,)
 
-    for feat_idx in topk_indices.tolist():
-        feat_acts = acts_nobos[:, feat_idx]  # (seq_len-1,)
-        if feat_acts.max().item() == 0:
-            continue
-        top_token_indices = feat_acts.topk(n_top_tokens).indices.tolist()
-        print(f"Feature {feat_idx}:")
-        for tok_idx in top_token_indices:
-            tok = tokens_nobos[tok_idx]
-            val = feat_acts[tok_idx].item()
-            print(f'    \u25b8 {tok!r:<12}: {val:.4f}')
+        # Next token: greedy argmax
+        next_token_id = int(outputs.logits[0, -1].argmax().item())
 
-    l0_per_token = (acts_nobos > 0).sum(dim=1).tolist()
-    print(f"\n=== L0 per token (excluding BOS) ===")
-    for tok, l0 in zip(tokens_nobos, l0_per_token):
-        print(f"    {tok!r:<16}: {l0}")
+        # SAE encode: shape (d_sae,)
+        sae_acts = sae.encode(residual_last.float().unsqueeze(0)).squeeze(0)
 
-    avg_l0 = sum(l0_per_token) / len(l0_per_token)
-    print(f"\nAverage L0 (non-BOS): {avg_l0:.2f}")
+        # All active features
+        active_indices = (sae_acts > 0).nonzero(as_tuple=True)[0].tolist()
+        l0 = len(active_indices)
+        active_features = [
+            ActiveFeature(
+                index=i,
+                activation=sae_acts[i].item(),
+                description=neuronpedia.explanations.get(i),
+            )
+            for i in active_indices
+        ]
 
+        token_str = tokenizer.decode([next_token_id])
+        token_analyses.append(TokenAnalysis(
+            token_id=next_token_id,
+            token=token_str,
+            l0=l0,
+            active_features=active_features,
+        ))
+
+        # Stop at EOS
+        if next_token_id == tokenizer.eos_token_id:
+            break
+
+        input_ids = torch.cat(
+            [input_ids, torch.tensor([[next_token_id]], device=device)],
+            dim=1,
+        )
+
+    full_text = tokenizer.decode(
+        [t.token_id for t in token_analyses],
+        skip_special_tokens=True,
+    )
+
+    return GenerationAnalysis(
+        prompt=prompt,
+        model_id="google/gemma-3-1b-pt",
+        layer=layer,
+        sae_width=neuronpedia.width,
+        generated_tokens=token_analyses,
+        full_generated_text=full_text,
+    )
+
+
+def explain_feature(feature: ActiveFeature) -> str:
+    """Return a human-readable string describing a single active feature."""
+    desc = feature.description or "no description available"
+    return (
+        f"Feature {feature.index}\n"
+        f"  Concept : {desc}\n"
+        f"  Activation : {feature.activation:.4f}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    model = AutoModelForCausalLM.from_pretrained(
-        "google/gemma-3-1b-pt",
-        device_map="auto",
-    )
-    tokenizer = AutoTokenizer.from_pretrained("google/gemma-3-1b-pt")
-    sae = load_sae(layer=22, width="65k", l0="medium", device=device)
+    MODEL_ID = "google/gemma-3-1b-pt"
+    LAYER = 22
+    WIDTH = "65k"
+
+    print(f"Loading model {MODEL_ID}...")
+    model = AutoModelForCausalLM.from_pretrained(MODEL_ID, device_map="auto")
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
+
+    print(f"Loading SAE (layer={LAYER}, width={WIDTH})...")
+    sae = load_sae(layer=LAYER, width=WIDTH, l0="medium", device=device)
+
+    print(f"Downloading Neuronpedia explanations for layer {LAYER} {WIDTH}...")
+    print("  Available scopes:", list_available_scopes("gemma-3-1b"))
+    neuronpedia = download_neuronpedia_explanations("gemma-3-1b", LAYER, WIDTH)
+    print(f"  Loaded {len(neuronpedia.explanations)} feature descriptions.")
 
     prompt = "The law of conservation of energy states that energy cannot be created or destroyed."
-    inspect_live(prompt, model, tokenizer, sae, layer=22, top_k=10)
+    print(f"\nRunning generation inspection for prompt: {prompt!r}\n")
+
+    result = inspect_live(prompt, model, tokenizer, sae, LAYER, neuronpedia)
+
+    print(f"Generated text: {result.full_generated_text!r}\n")
+    for step, tok in enumerate(result.generated_tokens, start=1):
+        print(f"Step {step:>3} | token={tok.token!r:<15} | L0={tok.l0}")
+        for feat in tok.active_features[:3]:   # print first 3 active features as sample
+            print(f"           {explain_feature(feat)}")
+        if len(tok.active_features) > 3:
+            print(f"           ... and {len(tok.active_features) - 3} more features")
