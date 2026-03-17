@@ -1,0 +1,5509 @@
+{
+  "prompt": "The law of conservation of energy states that energy cannot be created or destroyed.",
+  "hf_model_id": "google/gemma-3-1b-pt",
+  "neuronpedia_model_id": "gemma-3-1b",
+  "layer": 22,
+  "category": "resid_post",
+  "sae_width": "65k",
+  "sae_l0": "medium",
+  "token_count": 15,
+  "aggregate_metric": "sum_activation",
+  "top_features": [
+    {
+      "index": 6524,
+      "description": "entropy, disorder, free energy, thermal",
+      "sum_activation": 13192.5703125,
+      "max_activation": 2704.6279296875,
+      "mean_activation_when_active": 1099.380859375,
+      "active_token_count": 12,
+      "active_token_fraction": 0.8
+    },
+    {
+      "index": 1854,
+      "description": "Light, circumference, velocity, Pi",
+      "sum_activation": 12908.701171875,
+      "max_activation": 2453.096923828125,
+      "mean_activation_when_active": 1173.518310546875,
+      "active_token_count": 11,
+      "active_token_fraction": 0.7333333333333333
+    },
+    {
+      "index": 21489,
+      "description": "motion and physics concepts",
+      "sum_activation": 10425.9560546875,
+      "max_activation": 2041.943603515625,
+      "mean_activation_when_active": 947.814208984375,
+      "active_token_count": 11,
+      "active_token_fraction": 0.7333333333333333
+    },
+    {
+      "index": 1981,
+      "description": null,
+      "sum_activation": 8589.9775390625,
+      "max_activation": 1187.899169921875,
+      "mean_activation_when_active": 660.7675170898438,
+      "active_token_count": 13,
+      "active_token_fraction": 0.8666666666666667
+    },
+    {
+      "index": 4181,
+      "description": "data points clustered closely together",
+      "sum_activation": 8548.3564453125,
+      "max_activation": 1340.1834716796875,
+      "mean_activation_when_active": 854.8356323242188,
+      "active_token_count": 10,
+      "active_token_fraction": 0.6666666666666666
+    },
+    {
+      "index": 15781,
+      "description": "energy conversion: mechanical, chemical, kinetic",
+      "sum_activation": 7908.646484375,
+      "max_activation": 1637.8660888671875,
+      "mean_activation_when_active": 790.8646240234375,
+      "active_token_count": 10,
+      "active_token_fraction": 0.6666666666666666
+    },
+    {
+      "index": 1520,
+      "description": null,
+      "sum_activation": 7885.8857421875,
+      "max_activation": 1426.5103759765625,
+      "mean_activation_when_active": 788.5885620117188,
+      "active_token_count": 10,
+      "active_token_fraction": 0.6666666666666666
+    },
+    {
+      "index": 3883,
+      "description": "forces and power",
+      "sum_activation": 6915.4306640625,
+      "max_activation": 886.4984130859375,
+      "mean_activation_when_active": 576.285888671875,
+      "active_token_count": 12,
+      "active_token_fraction": 0.8
+    },
+    {
+      "index": 3971,
+      "description": "laws and principles",
+      "sum_activation": 6228.26513671875,
+      "max_activation": 1524.1658935546875,
+      "mean_activation_when_active": 692.0294799804688,
+      "active_token_count": 9,
+      "active_token_fraction": 0.6
+    },
+    {
+      "index": 50465,
+      "description": "thermodynamics laws and entropy",
+      "sum_activation": 6105.47509765625,
+      "max_activation": 1980.050048828125,
+      "mean_activation_when_active": 872.2107543945312,
+      "active_token_count": 7,
+      "active_token_fraction": 0.4666666666666667
+    },
+    {
+      "index": 990,
+      "description": null,
+      "sum_activation": 5979.4912109375,
+      "max_activation": 3766.4501953125,
+      "mean_activation_when_active": 1494.872802734375,
+      "active_token_count": 4,
+      "active_token_fraction": 0.26666666666666666
+    },
+    {
+      "index": 1665,
+      "description": null,
+      "sum_activation": 5388.6748046875,
+      "max_activation": 1738.4798583984375,
+      "mean_activation_when_active": 1077.7349853515625,
+      "active_token_count": 5,
+      "active_token_fraction": 0.3333333333333333
+    }
+  ],
+  "analyzed_tokens": [
+    {
+      "position": 0,
+      "token_id": 818,
+      "token": "The",
+      "l0": 15,
+      "active_features": [
+        {
+          "index": 274,
+          "activation": 356.9737548828125,
+          "description": "immediate help and health concerns"
+        },
+        {
+          "index": 279,
+          "activation": 258.40234375,
+          "description": "math expressions"
+        },
+        {
+          "index": 472,
+          "activation": 2555.68603515625,
+          "description": null
+        },
+        {
+          "index": 541,
+          "activation": 2989.40771484375,
+          "description": "requests for information or action"
+        },
+        {
+          "index": 936,
+          "activation": 1019.956787109375,
+          "description": "select answer or conclusion"
+        },
+        {
+          "index": 956,
+          "activation": 2334.251220703125,
+          "description": "language model"
+        },
+        {
+          "index": 1014,
+          "activation": 1948.5186767578125,
+          "description": "model response start"
+        },
+        {
+          "index": 1216,
+          "activation": 1530.6336669921875,
+          "description": "This is a classic question"
+        },
+        {
+          "index": 1794,
+          "activation": 418.97784423828125,
+          "description": "projects and initiatives"
+        },
+        {
+          "index": 2015,
+          "activation": 2622.375,
+          "description": "the market, the foundation"
+        },
+        {
+          "index": 2428,
+          "activation": 1661.4495849609375,
+          "description": "The followed by entities"
+        },
+        {
+          "index": 2557,
+          "activation": 427.142578125,
+          "description": "Tesla Model"
+        },
+        {
+          "index": 4339,
+          "activation": 522.3383178710938,
+          "description": "common word followed by specific word"
+        },
+        {
+          "index": 4489,
+          "activation": 3671.6025390625,
+          "description": "Image Pre"
+        },
+        {
+          "index": 53598,
+          "activation": 263.92822265625,
+          "description": "text generation configuration"
+        }
+      ]
+    },
+    {
+      "position": 1,
+      "token_id": 2621,
+      "token": "␠law",
+      "l0": 55,
+      "active_features": [
+        {
+          "index": 129,
+          "activation": 352.9583435058594,
+          "description": "vulnerable all"
+        },
+        {
+          "index": 195,
+          "activation": 627.17529296875,
+          "description": null
+        },
+        {
+          "index": 409,
+          "activation": 228.44677734375,
+          "description": "Swagger uses"
+        },
+        {
+          "index": 502,
+          "activation": 513.0838623046875,
+          "description": null
+        },
+        {
+          "index": 541,
+          "activation": 319.94696044921875,
+          "description": "requests for information or action"
+        },
+        {
+          "index": 709,
+          "activation": 357.99169921875,
+          "description": "depends on factors"
+        },
+        {
+          "index": 751,
+          "activation": 357.227783203125,
+          "description": "smooth legal proceedings"
+        },
+        {
+          "index": 898,
+          "activation": 279.3890380859375,
+          "description": "health market privacy laws"
+        },
+        {
+          "index": 990,
+          "activation": 3766.4501953125,
+          "description": null
+        },
+        {
+          "index": 1014,
+          "activation": 1059.3936767578125,
+          "description": "model response start"
+        },
+        {
+          "index": 1174,
+          "activation": 539.6290893554688,
+          "description": "depending on"
+        },
+        {
+          "index": 1203,
+          "activation": 349.300048828125,
+          "description": "$, n then 'que', se"
+        },
+        {
+          "index": 1381,
+          "activation": 417.232421875,
+          "description": "57"
+        },
+        {
+          "index": 1408,
+          "activation": 259.2515563964844,
+          "description": null
+        },
+        {
+          "index": 1429,
+          "activation": 995.3063354492188,
+          "description": "both refer"
+        },
+        {
+          "index": 1449,
+          "activation": 572.8595581054688,
+          "description": "model response"
+        },
+        {
+          "index": 1452,
+          "activation": 279.8753662109375,
+          "description": null
+        },
+        {
+          "index": 1552,
+          "activation": 222.22390747070312,
+          "description": "function arguments and returns"
+        },
+        {
+          "index": 1665,
+          "activation": 1263.0531005859375,
+          "description": null
+        },
+        {
+          "index": 1680,
+          "activation": 471.2701416015625,
+          "description": "Okay, let's"
+        },
+        {
+          "index": 1744,
+          "activation": 695.030517578125,
+          "description": null
+        },
+        {
+          "index": 1834,
+          "activation": 249.1636962890625,
+          "description": "what prompted you to"
+        },
+        {
+          "index": 2251,
+          "activation": 580.4456787109375,
+          "description": null
+        },
+        {
+          "index": 2304,
+          "activation": 434.27655029296875,
+          "description": "what's wrong"
+        },
+        {
+          "index": 2412,
+          "activation": 343.4464111328125,
+          "description": "university campus students faculty"
+        },
+        {
+          "index": 2518,
+          "activation": 356.2709045410156,
+          "description": null
+        },
+        {
+          "index": 2560,
+          "activation": 715.2589111328125,
+          "description": "what questions"
+        },
+        {
+          "index": 2569,
+          "activation": 375.35443115234375,
+          "description": "Instead of requests"
+        },
+        {
+          "index": 2957,
+          "activation": 655.7288818359375,
+          "description": "there's no"
+        },
+        {
+          "index": 3136,
+          "activation": 315.672607421875,
+          "description": "distinct items or logical connections"
+        },
+        {
+          "index": 3376,
+          "activation": 649.4132080078125,
+          "description": "start of response"
+        },
+        {
+          "index": 3434,
+          "activation": 1311.959228515625,
+          "description": "helpful informative AI assistant"
+        },
+        {
+          "index": 3550,
+          "activation": 473.4599609375,
+          "description": "i don't"
+        },
+        {
+          "index": 3592,
+          "activation": 847.8187255859375,
+          "description": "one that fits"
+        },
+        {
+          "index": 3721,
+          "activation": 336.99749755859375,
+          "description": "themes and topics"
+        },
+        {
+          "index": 4174,
+          "activation": 847.7281494140625,
+          "description": "policy and requirements"
+        },
+        {
+          "index": 4217,
+          "activation": 203.01437377929688,
+          "description": "in languages"
+        },
+        {
+          "index": 4536,
+          "activation": 412.2201843261719,
+          "description": "lesson-related code"
+        },
+        {
+          "index": 4583,
+          "activation": 295.7086181640625,
+          "description": "probability, distributions, and density"
+        },
+        {
+          "index": 5319,
+          "activation": 520.3589477539062,
+          "description": "personal life, spirit, and purpose"
+        },
+        {
+          "index": 5764,
+          "activation": 829.5824584960938,
+          "description": "legal consequences, challenges, assistance"
+        },
+        {
+          "index": 5982,
+          "activation": 328.03607177734375,
+          "description": "simple attire"
+        },
+        {
+          "index": 6052,
+          "activation": 619.6586303710938,
+          "description": "justice and fairness"
+        },
+        {
+          "index": 8057,
+          "activation": 253.2454376220703,
+          "description": "programming class definitions"
+        },
+        {
+          "index": 10361,
+          "activation": 363.9582824707031,
+          "description": "enabling actions or permissions"
+        },
+        {
+          "index": 11278,
+          "activation": 267.2745361328125,
+          "description": "HTML container definitions"
+        },
+        {
+          "index": 12701,
+          "activation": 293.1873779296875,
+          "description": "sql code blocks"
+        },
+        {
+          "index": 14155,
+          "activation": 3089.001220703125,
+          "description": "law, lawyers, and enforcement"
+        },
+        {
+          "index": 15606,
+          "activation": 522.9427490234375,
+          "description": "explain"
+        },
+        {
+          "index": 15858,
+          "activation": 555.9130859375,
+          "description": "Python code logic"
+        },
+        {
+          "index": 18113,
+          "activation": 1435.6424560546875,
+          "description": "Russian noun endings"
+        },
+        {
+          "index": 22160,
+          "activation": 195.2587890625,
+          "description": "also"
+        },
+        {
+          "index": 47941,
+          "activation": 626.892333984375,
+          "description": "abilities developing through effort"
+        },
+        {
+          "index": 53598,
+          "activation": 372.1236572265625,
+          "description": "text generation configuration"
+        },
+        {
+          "index": 57076,
+          "activation": 512.9633178710938,
+          "description": "light cardio or stretching"
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "token_id": 529,
+      "token": "␠of",
+      "l0": 89,
+      "active_features": [
+        {
+          "index": 166,
+          "activation": 670.5902099609375,
+          "description": "demonstrative determiners and their foreign equivalents"
+        },
+        {
+          "index": 173,
+          "activation": 583.7061767578125,
+          "description": "math concepts and solving"
+        },
+        {
+          "index": 243,
+          "activation": 298.8887023925781,
+          "description": null
+        },
+        {
+          "index": 329,
+          "activation": 293.2225341796875,
+          "description": "number followed by closing bracket"
+        },
+        {
+          "index": 385,
+          "activation": 353.7908020019531,
+          "description": null
+        },
+        {
+          "index": 458,
+          "activation": 295.42724609375,
+          "description": null
+        },
+        {
+          "index": 541,
+          "activation": 316.63873291015625,
+          "description": "requests for information or action"
+        },
+        {
+          "index": 653,
+          "activation": 305.2471923828125,
+          "description": "considering or thinking about concepts"
+        },
+        {
+          "index": 736,
+          "activation": 633.38671875,
+          "description": "German import laws"
+        },
+        {
+          "index": 773,
+          "activation": 2107.862548828125,
+          "description": "X of Y structure"
+        },
+        {
+          "index": 1009,
+          "activation": 411.6502380371094,
+          "description": null
+        },
+        {
+          "index": 1050,
+          "activation": 255.359619140625,
+          "description": "combining and integration"
+        },
+        {
+          "index": 1124,
+          "activation": 440.216552734375,
+          "description": "consumer.gov"
+        },
+        {
+          "index": 1201,
+          "activation": 407.9563903808594,
+          "description": "numbers and calculations"
+        },
+        {
+          "index": 1216,
+          "activation": 362.0121765136719,
+          "description": "This is a classic question"
+        },
+        {
+          "index": 1504,
+          "activation": 432.3980407714844,
+          "description": "Puzzles"
+        },
+        {
+          "index": 1505,
+          "activation": 771.2222900390625,
+          "description": "of course"
+        },
+        {
+          "index": 1553,
+          "activation": 360.76318359375,
+          "description": "URLs and explanations"
+        },
+        {
+          "index": 1641,
+          "activation": 284.6077575683594,
+          "description": "consulting, management, finance, attorney"
+        },
+        {
+          "index": 1644,
+          "activation": 374.3003845214844,
+          "description": "Who is your target audience?"
+        },
+        {
+          "index": 1667,
+          "activation": 344.68798828125,
+          "description": "service mode"
+        },
+        {
+          "index": 1768,
+          "activation": 372.1900939941406,
+          "description": "The Princess Bride"
+        },
+        {
+          "index": 1957,
+          "activation": 392.85382080078125,
+          "description": "tech companies and digital concepts"
+        },
+        {
+          "index": 1981,
+          "activation": 317.02996826171875,
+          "description": null
+        },
+        {
+          "index": 2014,
+          "activation": 642.7410888671875,
+          "description": null
+        },
+        {
+          "index": 2087,
+          "activation": 609.114501953125,
+          "description": "sense of abstract state or being"
+        },
+        {
+          "index": 2187,
+          "activation": 483.70745849609375,
+          "description": "contract and agreement terms"
+        },
+        {
+          "index": 2256,
+          "activation": 423.86669921875,
+          "description": null
+        },
+        {
+          "index": 2419,
+          "activation": 309.9419860839844,
+          "description": null
+        },
+        {
+          "index": 2502,
+          "activation": 347.1775207519531,
+          "description": "multilingual words"
+        },
+        {
+          "index": 2512,
+          "activation": 279.067138671875,
+          "description": "locations: state, city, country"
+        },
+        {
+          "index": 2543,
+          "activation": 413.76275634765625,
+          "description": "public key, health, cloud, speaking, debate"
+        },
+        {
+          "index": 2644,
+          "activation": 200.79193115234375,
+          "description": "the math result"
+        },
+        {
+          "index": 2650,
+          "activation": 589.10595703125,
+          "description": "publicly available"
+        },
+        {
+          "index": 2662,
+          "activation": 336.5921936035156,
+          "description": "myth and misinterpretations"
+        },
+        {
+          "index": 2701,
+          "activation": 355.01202392578125,
+          "description": "up-to-date information and time periods"
+        },
+        {
+          "index": 2706,
+          "activation": 358.0455322265625,
+          "description": "what questions seeking explanation"
+        },
+        {
+          "index": 2957,
+          "activation": 228.84591674804688,
+          "description": "there's no"
+        },
+        {
+          "index": 3097,
+          "activation": 387.98675537109375,
+          "description": "places and nationalities"
+        },
+        {
+          "index": 3298,
+          "activation": 187.03872680664062,
+          "description": "the"
+        },
+        {
+          "index": 3354,
+          "activation": 337.3591613769531,
+          "description": "speech phrases"
+        },
+        {
+          "index": 3508,
+          "activation": 294.29827880859375,
+          "description": "fluid collection accumulation"
+        },
+        {
+          "index": 3574,
+          "activation": 826.8930053710938,
+          "description": "e-commerce consumerism"
+        },
+        {
+          "index": 3764,
+          "activation": 291.7597961425781,
+          "description": "mindfulness meditation and relaxation"
+        },
+        {
+          "index": 3883,
+          "activation": 556.4046020507812,
+          "description": "forces and power"
+        },
+        {
+          "index": 3971,
+          "activation": 507.23211669921875,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4044,
+          "activation": 368.1290588378906,
+          "description": null
+        },
+        {
+          "index": 4062,
+          "activation": 253.84140014648438,
+          "description": "scientific names, latin endings"
+        },
+        {
+          "index": 4163,
+          "activation": 290.9158935546875,
+          "description": "wikipedia links"
+        },
+        {
+          "index": 4339,
+          "activation": 266.97210693359375,
+          "description": "common word followed by specific word"
+        },
+        {
+          "index": 4396,
+          "activation": 338.0047607421875,
+          "description": "stone related materials"
+        },
+        {
+          "index": 4439,
+          "activation": 351.00970458984375,
+          "description": "food, toys, animals"
+        },
+        {
+          "index": 5098,
+          "activation": 292.68316650390625,
+          "description": "author and exposition"
+        },
+        {
+          "index": 5427,
+          "activation": 457.86700439453125,
+          "description": "education, signal processing, personalized content"
+        },
+        {
+          "index": 5665,
+          "activation": 281.83880615234375,
+          "description": "during sleep, staring, enough"
+        },
+        {
+          "index": 5989,
+          "activation": 380.0872497558594,
+          "description": "data types (text, integer, string)"
+        },
+        {
+          "index": 6086,
+          "activation": 480.510498046875,
+          "description": "sums and addition"
+        },
+        {
+          "index": 6421,
+          "activation": 371.8577575683594,
+          "description": "logical replication clear cell monitor dependencies"
+        },
+        {
+          "index": 6431,
+          "activation": 403.2499694824219,
+          "description": "\"a\" followed by positive adjectives"
+        },
+        {
+          "index": 6640,
+          "activation": 387.1198425292969,
+          "description": "front-end, back-end, receiving"
+        },
+        {
+          "index": 7476,
+          "activation": 799.8153686523438,
+          "description": "law and contracts"
+        },
+        {
+          "index": 7651,
+          "activation": 787.2453002929688,
+          "description": "historical figures and proofs"
+        },
+        {
+          "index": 7794,
+          "activation": 295.3211669921875,
+          "description": "high and higher scales"
+        },
+        {
+          "index": 7885,
+          "activation": 302.1611328125,
+          "description": "Unreal Engine"
+        },
+        {
+          "index": 7895,
+          "activation": 280.1011962890625,
+          "description": "transgender, transformer, transcendent, transfer"
+        },
+        {
+          "index": 8380,
+          "activation": 436.0489501953125,
+          "description": "Mental Health avoidance"
+        },
+        {
+          "index": 9183,
+          "activation": 297.390625,
+          "description": "explaining concepts"
+        },
+        {
+          "index": 11205,
+          "activation": 238.62074279785156,
+          "description": "AI model names"
+        },
+        {
+          "index": 12670,
+          "activation": 310.363037109375,
+          "description": "sports team descriptors"
+        },
+        {
+          "index": 12969,
+          "activation": 275.10662841796875,
+          "description": "digital marketing services and freelancing"
+        },
+        {
+          "index": 14011,
+          "activation": 1719.3243408203125,
+          "description": "open source models"
+        },
+        {
+          "index": 14898,
+          "activation": 459.0885925292969,
+          "description": "boolean true"
+        },
+        {
+          "index": 16392,
+          "activation": 1159.7667236328125,
+          "description": "statistical modeling methods"
+        },
+        {
+          "index": 16890,
+          "activation": 685.651611328125,
+          "description": "legal and business terms"
+        },
+        {
+          "index": 17290,
+          "activation": 366.81829833984375,
+          "description": "special characters followed by a letter"
+        },
+        {
+          "index": 17781,
+          "activation": 343.14678955078125,
+          "description": "natural gas"
+        },
+        {
+          "index": 18113,
+          "activation": 390.9512023925781,
+          "description": "Russian noun endings"
+        },
+        {
+          "index": 20183,
+          "activation": 325.65289306640625,
+          "description": "1080p and 1440p gaming performance"
+        },
+        {
+          "index": 22074,
+          "activation": 392.786376953125,
+          "description": "application/json"
+        },
+        {
+          "index": 22773,
+          "activation": 331.470703125,
+          "description": "bash script start"
+        },
+        {
+          "index": 28414,
+          "activation": 335.31500244140625,
+          "description": "respect and suspicion"
+        },
+        {
+          "index": 28491,
+          "activation": 328.6800537109375,
+          "description": "spacetime curvature"
+        },
+        {
+          "index": 30077,
+          "activation": 290.16278076171875,
+          "description": "tagName img flag pig"
+        },
+        {
+          "index": 31887,
+          "activation": 414.8475646972656,
+          "description": "is followed by answer"
+        },
+        {
+          "index": 34184,
+          "activation": 293.7501525878906,
+          "description": "doing so"
+        },
+        {
+          "index": 42348,
+          "activation": 416.80950927734375,
+          "description": "line of reasoning, defense, sight"
+        },
+        {
+          "index": 43194,
+          "activation": 226.3837890625,
+          "description": "generate or generation"
+        },
+        {
+          "index": 56991,
+          "activation": 356.3631591796875,
+          "description": "Fremen, trembingly, limps"
+        },
+        {
+          "index": 62854,
+          "activation": 4185.046875,
+          "description": "breaking down or dividing"
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "token_id": 16672,
+      "token": "␠conservation",
+      "l0": 50,
+      "active_features": [
+        {
+          "index": 129,
+          "activation": 497.3373718261719,
+          "description": "vulnerable all"
+        },
+        {
+          "index": 195,
+          "activation": 2550.374267578125,
+          "description": null
+        },
+        {
+          "index": 500,
+          "activation": 226.0846405029297,
+          "description": null
+        },
+        {
+          "index": 530,
+          "activation": 362.4078369140625,
+          "description": "complex, serious, or correct information"
+        },
+        {
+          "index": 538,
+          "activation": 1791.0478515625,
+          "description": "quantifier or abstract concept followed by \"of\""
+        },
+        {
+          "index": 608,
+          "activation": 298.393310546875,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 990,
+          "activation": 705.3636474609375,
+          "description": null
+        },
+        {
+          "index": 1282,
+          "activation": 487.15283203125,
+          "description": null
+        },
+        {
+          "index": 1389,
+          "activation": 286.92755126953125,
+          "description": "direction and orientation"
+        },
+        {
+          "index": 1429,
+          "activation": 899.6076049804688,
+          "description": "both refer"
+        },
+        {
+          "index": 1665,
+          "activation": 1331.6243896484375,
+          "description": null
+        },
+        {
+          "index": 1854,
+          "activation": 601.7709350585938,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1884,
+          "activation": 535.0079345703125,
+          "description": "english wikipedia links"
+        },
+        {
+          "index": 1981,
+          "activation": 507.98931884765625,
+          "description": null
+        },
+        {
+          "index": 2228,
+          "activation": 258.20330810546875,
+          "description": "electricity generation"
+        },
+        {
+          "index": 2316,
+          "activation": 677.5380859375,
+          "description": null
+        },
+        {
+          "index": 2358,
+          "activation": 380.6087646484375,
+          "description": "atoms"
+        },
+        {
+          "index": 2370,
+          "activation": 428.2995910644531,
+          "description": null
+        },
+        {
+          "index": 2419,
+          "activation": 227.79861450195312,
+          "description": null
+        },
+        {
+          "index": 2477,
+          "activation": 347.2832336425781,
+          "description": null
+        },
+        {
+          "index": 2518,
+          "activation": 771.7863159179688,
+          "description": null
+        },
+        {
+          "index": 2580,
+          "activation": 274.9101867675781,
+          "description": "gases and air"
+        },
+        {
+          "index": 2706,
+          "activation": 248.9613037109375,
+          "description": "what questions seeking explanation"
+        },
+        {
+          "index": 2957,
+          "activation": 213.71875,
+          "description": "there's no"
+        },
+        {
+          "index": 2977,
+          "activation": 364.2276306152344,
+          "description": "Alliance on"
+        },
+        {
+          "index": 3053,
+          "activation": 345.4803161621094,
+          "description": "I can offer"
+        },
+        {
+          "index": 3129,
+          "activation": 439.2384948730469,
+          "description": "physics and math concepts"
+        },
+        {
+          "index": 3550,
+          "activation": 255.74462890625,
+          "description": "i don't"
+        },
+        {
+          "index": 3883,
+          "activation": 460.76202392578125,
+          "description": "forces and power"
+        },
+        {
+          "index": 3971,
+          "activation": 1326.9935302734375,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4022,
+          "activation": 431.0455017089844,
+          "description": "to help me tailor"
+        },
+        {
+          "index": 4134,
+          "activation": 305.4280700683594,
+          "description": "specific examples and lists"
+        },
+        {
+          "index": 4174,
+          "activation": 478.0128173828125,
+          "description": "policy and requirements"
+        },
+        {
+          "index": 4880,
+          "activation": 306.9012756347656,
+          "description": "heart and cardiac health"
+        },
+        {
+          "index": 5347,
+          "activation": 446.634033203125,
+          "description": "random forests and dynamic programming"
+        },
+        {
+          "index": 5781,
+          "activation": 761.3073120117188,
+          "description": "words before of or hyphen"
+        },
+        {
+          "index": 6524,
+          "activation": 711.54345703125,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 6565,
+          "activation": 279.0089111328125,
+          "description": "paragraph, Professionals, pig"
+        },
+        {
+          "index": 6611,
+          "activation": 565.4722290039062,
+          "description": "quality of"
+        },
+        {
+          "index": 7223,
+          "activation": 318.39385986328125,
+          "description": "discussing mental health resources"
+        },
+        {
+          "index": 9764,
+          "activation": 372.141845703125,
+          "description": "false positives and negatives"
+        },
+        {
+          "index": 13299,
+          "activation": 663.4835205078125,
+          "description": "most powerful and popular"
+        },
+        {
+          "index": 15754,
+          "activation": 510.5319519042969,
+          "description": "M-starting words and phrases"
+        },
+        {
+          "index": 18600,
+          "activation": 378.66680908203125,
+          "description": "monetization strategies"
+        },
+        {
+          "index": 18640,
+          "activation": 376.4226989746094,
+          "description": "Environmental Protection"
+        },
+        {
+          "index": 21306,
+          "activation": 1001.293701171875,
+          "description": "principles of"
+        },
+        {
+          "index": 21489,
+          "activation": 581.501220703125,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 31728,
+          "activation": 1005.3671875,
+          "description": "I can, cannot, want"
+        },
+        {
+          "index": 41059,
+          "activation": 397.4383850097656,
+          "description": "enthusiasm"
+        },
+        {
+          "index": 62854,
+          "activation": 393.09783935546875,
+          "description": "breaking down or dividing"
+        }
+      ]
+    },
+    {
+      "position": 4,
+      "token_id": 529,
+      "token": "␠of",
+      "l0": 88,
+      "active_features": [
+        {
+          "index": 104,
+          "activation": 368.15118408203125,
+          "description": "abstract qualities and states"
+        },
+        {
+          "index": 166,
+          "activation": 614.5096435546875,
+          "description": "demonstrative determiners and their foreign equivalents"
+        },
+        {
+          "index": 173,
+          "activation": 766.4073486328125,
+          "description": "math concepts and solving"
+        },
+        {
+          "index": 222,
+          "activation": 798.7639770507812,
+          "description": "keeping things maintained"
+        },
+        {
+          "index": 351,
+          "activation": 718.1326904296875,
+          "description": null
+        },
+        {
+          "index": 461,
+          "activation": 678.9632568359375,
+          "description": null
+        },
+        {
+          "index": 530,
+          "activation": 500.19189453125,
+          "description": "complex, serious, or correct information"
+        },
+        {
+          "index": 608,
+          "activation": 397.4776611328125,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 690,
+          "activation": 293.4410705566406,
+          "description": "financial ranges and prices"
+        },
+        {
+          "index": 773,
+          "activation": 1735.6649169921875,
+          "description": "X of Y structure"
+        },
+        {
+          "index": 792,
+          "activation": 281.4313049316406,
+          "description": "as a classification"
+        },
+        {
+          "index": 914,
+          "activation": 316.308349609375,
+          "description": null
+        },
+        {
+          "index": 1047,
+          "activation": 443.412109375,
+          "description": "quantum states, energy, magnetic fields"
+        },
+        {
+          "index": 1389,
+          "activation": 647.2944946289062,
+          "description": "direction and orientation"
+        },
+        {
+          "index": 1520,
+          "activation": 625.16015625,
+          "description": null
+        },
+        {
+          "index": 1616,
+          "activation": 491.1392822265625,
+          "description": "need more information"
+        },
+        {
+          "index": 1758,
+          "activation": 284.7852478027344,
+          "description": null
+        },
+        {
+          "index": 1809,
+          "activation": 481.829345703125,
+          "description": null
+        },
+        {
+          "index": 1847,
+          "activation": 338.1512451171875,
+          "description": "comparison or definition symbols"
+        },
+        {
+          "index": 1854,
+          "activation": 1723.93408203125,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1958,
+          "activation": 275.56256103515625,
+          "description": null
+        },
+        {
+          "index": 1971,
+          "activation": 302.2904052734375,
+          "description": null
+        },
+        {
+          "index": 1981,
+          "activation": 486.53277587890625,
+          "description": null
+        },
+        {
+          "index": 2128,
+          "activation": 187.47607421875,
+          "description": "input tensor and vector processing"
+        },
+        {
+          "index": 2290,
+          "activation": 320.52044677734375,
+          "description": "various types of information"
+        },
+        {
+          "index": 2316,
+          "activation": 1057.481689453125,
+          "description": null
+        },
+        {
+          "index": 2321,
+          "activation": 369.1502685546875,
+          "description": "less light"
+        },
+        {
+          "index": 2358,
+          "activation": 618.2673950195312,
+          "description": "atoms"
+        },
+        {
+          "index": 2423,
+          "activation": 266.92578125,
+          "description": null
+        },
+        {
+          "index": 2527,
+          "activation": 519.8394165039062,
+          "description": "particle physics"
+        },
+        {
+          "index": 2584,
+          "activation": 328.0163879394531,
+          "description": "selected ambient works"
+        },
+        {
+          "index": 2644,
+          "activation": 359.80108642578125,
+          "description": "the math result"
+        },
+        {
+          "index": 2706,
+          "activation": 280.1591796875,
+          "description": "what questions seeking explanation"
+        },
+        {
+          "index": 3059,
+          "activation": 312.023193359375,
+          "description": "physical properties and characteristics"
+        },
+        {
+          "index": 3116,
+          "activation": 369.0411376953125,
+          "description": "amount and quantity"
+        },
+        {
+          "index": 3124,
+          "activation": 543.7040405273438,
+          "description": "purchase"
+        },
+        {
+          "index": 3309,
+          "activation": 266.6054992675781,
+          "description": "roots and solutions"
+        },
+        {
+          "index": 3757,
+          "activation": 416.85784912109375,
+          "description": "generating python code"
+        },
+        {
+          "index": 3883,
+          "activation": 443.9191589355469,
+          "description": "forces and power"
+        },
+        {
+          "index": 3971,
+          "activation": 607.9508056640625,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4181,
+          "activation": 464.40509033203125,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4216,
+          "activation": 241.2487335205078,
+          "description": "information seeking"
+        },
+        {
+          "index": 4301,
+          "activation": 267.66912841796875,
+          "description": "IVR, dir, var"
+        },
+        {
+          "index": 4339,
+          "activation": 416.03057861328125,
+          "description": "common word followed by specific word"
+        },
+        {
+          "index": 5065,
+          "activation": 492.0562744140625,
+          "description": "money and financial terms"
+        },
+        {
+          "index": 5418,
+          "activation": 395.6802978515625,
+          "description": "mathematical formulas and quantities"
+        },
+        {
+          "index": 5476,
+          "activation": 251.444580078125,
+          "description": "phone number"
+        },
+        {
+          "index": 5665,
+          "activation": 298.090087890625,
+          "description": "during sleep, staring, enough"
+        },
+        {
+          "index": 5743,
+          "activation": 311.0350036621094,
+          "description": "keep track"
+        },
+        {
+          "index": 6086,
+          "activation": 238.0399169921875,
+          "description": "sums and addition"
+        },
+        {
+          "index": 6272,
+          "activation": 406.37384033203125,
+          "description": "nostalgia compounds"
+        },
+        {
+          "index": 6524,
+          "activation": 1276.4439697265625,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 6674,
+          "activation": 386.6262512207031,
+          "description": "web URLs"
+        },
+        {
+          "index": 6909,
+          "activation": 444.9367370605469,
+          "description": "structural punctuation"
+        },
+        {
+          "index": 7126,
+          "activation": 329.559814453125,
+          "description": "self improvement"
+        },
+        {
+          "index": 7651,
+          "activation": 319.79931640625,
+          "description": "historical figures and proofs"
+        },
+        {
+          "index": 7794,
+          "activation": 273.511962890625,
+          "description": "high and higher scales"
+        },
+        {
+          "index": 8475,
+          "activation": 556.7998657226562,
+          "description": "air, wind, and weather"
+        },
+        {
+          "index": 9218,
+          "activation": 606.03857421875,
+          "description": "income and gains tax"
+        },
+        {
+          "index": 9723,
+          "activation": 307.3163757324219,
+          "description": "content and weight"
+        },
+        {
+          "index": 9764,
+          "activation": 711.652099609375,
+          "description": "false positives and negatives"
+        },
+        {
+          "index": 10343,
+          "activation": 486.86846923828125,
+          "description": "love is respect"
+        },
+        {
+          "index": 12213,
+          "activation": 351.3756408691406,
+          "description": "introducing comparative tables"
+        },
+        {
+          "index": 12907,
+          "activation": 510.3732604980469,
+          "description": "Roughly budget question"
+        },
+        {
+          "index": 14898,
+          "activation": 1355.4625244140625,
+          "description": "boolean true"
+        },
+        {
+          "index": 15754,
+          "activation": 851.150390625,
+          "description": "M-starting words and phrases"
+        },
+        {
+          "index": 15781,
+          "activation": 982.1228637695312,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 16329,
+          "activation": 336.7478942871094,
+          "description": "continue to next"
+        },
+        {
+          "index": 17290,
+          "activation": 447.18121337890625,
+          "description": "special characters followed by a letter"
+        },
+        {
+          "index": 19806,
+          "activation": 815.7575073242188,
+          "description": "quantum state"
+        },
+        {
+          "index": 19845,
+          "activation": 624.931396484375,
+          "description": "wave-particle duality, quantum mechanics"
+        },
+        {
+          "index": 21145,
+          "activation": 521.8273315429688,
+          "description": "a fascinating and relatively"
+        },
+        {
+          "index": 21489,
+          "activation": 1556.047607421875,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 25466,
+          "activation": 567.28515625,
+          "description": "protecting you and individuals"
+        },
+        {
+          "index": 31033,
+          "activation": 311.18218994140625,
+          "description": "data validation and standardization"
+        },
+        {
+          "index": 31081,
+          "activation": 279.1824645996094,
+          "description": "seek medical attention"
+        },
+        {
+          "index": 33673,
+          "activation": 499.093505859375,
+          "description": "that can"
+        },
+        {
+          "index": 35866,
+          "activation": 657.3675537109375,
+          "description": "discrete units or packets"
+        },
+        {
+          "index": 38436,
+          "activation": 286.05572509765625,
+          "description": "ranges and limits"
+        },
+        {
+          "index": 43877,
+          "activation": 415.2952880859375,
+          "description": "million dollar questions"
+        },
+        {
+          "index": 44965,
+          "activation": 299.41302490234375,
+          "description": "move beyond"
+        },
+        {
+          "index": 45353,
+          "activation": 324.69921875,
+          "description": "finding specific criteria"
+        },
+        {
+          "index": 47440,
+          "activation": 213.873779296875,
+          "description": "in general"
+        },
+        {
+          "index": 52664,
+          "activation": 382.5382080078125,
+          "description": "separation of church and state"
+        },
+        {
+          "index": 57872,
+          "activation": 734.6873168945312,
+          "description": "position and momentum"
+        },
+        {
+          "index": 60714,
+          "activation": 423.5291748046875,
+          "description": "sql create table"
+        },
+        {
+          "index": 62854,
+          "activation": 637.9591674804688,
+          "description": "breaking down or dividing"
+        },
+        {
+          "index": 65287,
+          "activation": 269.9281311035156,
+          "description": "harming self or others"
+        }
+      ]
+    },
+    {
+      "position": 5,
+      "token_id": 2778,
+      "token": "␠energy",
+      "l0": 53,
+      "active_features": [
+        {
+          "index": 129,
+          "activation": 643.4298095703125,
+          "description": "vulnerable all"
+        },
+        {
+          "index": 407,
+          "activation": 254.8602752685547,
+          "description": null
+        },
+        {
+          "index": 479,
+          "activation": 351.399658203125,
+          "description": "-ics and -ical endings"
+        },
+        {
+          "index": 578,
+          "activation": 450.58544921875,
+          "description": "concepts behind principles"
+        },
+        {
+          "index": 608,
+          "activation": 388.7908935546875,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 675,
+          "activation": 323.5313720703125,
+          "description": "leads to action or possibility"
+        },
+        {
+          "index": 677,
+          "activation": 724.108154296875,
+          "description": "mathematical calculations and equations"
+        },
+        {
+          "index": 709,
+          "activation": 854.93408203125,
+          "description": "depends on factors"
+        },
+        {
+          "index": 898,
+          "activation": 538.76025390625,
+          "description": "health market privacy laws"
+        },
+        {
+          "index": 952,
+          "activation": 452.1865234375,
+          "description": null
+        },
+        {
+          "index": 971,
+          "activation": 150.6339111328125,
+          "description": null
+        },
+        {
+          "index": 990,
+          "activation": 1157.2244873046875,
+          "description": null
+        },
+        {
+          "index": 1016,
+          "activation": 962.045654296875,
+          "description": "snippet is described effectively"
+        },
+        {
+          "index": 1272,
+          "activation": 601.095458984375,
+          "description": "function or outcome"
+        },
+        {
+          "index": 1429,
+          "activation": 1731.99072265625,
+          "description": "both refer"
+        },
+        {
+          "index": 1512,
+          "activation": 269.17279052734375,
+          "description": "script executed directly"
+        },
+        {
+          "index": 1580,
+          "activation": 736.4407348632812,
+          "description": "explains and describes concepts"
+        },
+        {
+          "index": 1665,
+          "activation": 1738.4798583984375,
+          "description": null
+        },
+        {
+          "index": 1682,
+          "activation": 405.0380859375,
+          "description": "code documentation snippets"
+        },
+        {
+          "index": 1744,
+          "activation": 426.2384033203125,
+          "description": null
+        },
+        {
+          "index": 1854,
+          "activation": 589.4642944335938,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1884,
+          "activation": 525.0515747070312,
+          "description": "english wikipedia links"
+        },
+        {
+          "index": 1981,
+          "activation": 385.1580810546875,
+          "description": null
+        },
+        {
+          "index": 2023,
+          "activation": 282.39031982421875,
+          "description": null
+        },
+        {
+          "index": 2053,
+          "activation": 244.94073486328125,
+          "description": "mentioning caveats or emphasis"
+        },
+        {
+          "index": 2171,
+          "activation": 471.32476806640625,
+          "description": "studies and estimates show"
+        },
+        {
+          "index": 2370,
+          "activation": 598.9947509765625,
+          "description": null
+        },
+        {
+          "index": 2371,
+          "activation": 310.9137268066406,
+          "description": null
+        },
+        {
+          "index": 2518,
+          "activation": 1715.4632568359375,
+          "description": null
+        },
+        {
+          "index": 2549,
+          "activation": 224.15228271484375,
+          "description": null
+        },
+        {
+          "index": 2652,
+          "activation": 351.926025390625,
+          "description": "mathematical proof and concepts"
+        },
+        {
+          "index": 2706,
+          "activation": 376.1998291015625,
+          "description": "what questions seeking explanation"
+        },
+        {
+          "index": 3129,
+          "activation": 259.67926025390625,
+          "description": "physics and math concepts"
+        },
+        {
+          "index": 3971,
+          "activation": 1524.1658935546875,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4134,
+          "activation": 292.9385070800781,
+          "description": "specific examples and lists"
+        },
+        {
+          "index": 4174,
+          "activation": 769.862060546875,
+          "description": "policy and requirements"
+        },
+        {
+          "index": 4217,
+          "activation": 225.26736450195312,
+          "description": "in languages"
+        },
+        {
+          "index": 4504,
+          "activation": 601.31640625,
+          "description": "important considerations and related discussions"
+        },
+        {
+          "index": 4880,
+          "activation": 292.7906188964844,
+          "description": "heart and cardiac health"
+        },
+        {
+          "index": 6524,
+          "activation": 981.1180419921875,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 8209,
+          "activation": 397.8388366699219,
+          "description": "RAINN, Billboard, Estrogen, Immersion, Confucius"
+        },
+        {
+          "index": 10681,
+          "activation": 405.2497253417969,
+          "description": "thinkers' theories and ideas"
+        },
+        {
+          "index": 15606,
+          "activation": 414.5622863769531,
+          "description": "explain"
+        },
+        {
+          "index": 18640,
+          "activation": 378.7159118652344,
+          "description": "Environmental Protection"
+        },
+        {
+          "index": 21306,
+          "activation": 1149.942138671875,
+          "description": "principles of"
+        },
+        {
+          "index": 21489,
+          "activation": 661.309326171875,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 27188,
+          "activation": 283.11956787109375,
+          "description": "orbitals, energy, bonding"
+        },
+        {
+          "index": 28782,
+          "activation": 282.65057373046875,
+          "description": "spacetime, smooth, curvature"
+        },
+        {
+          "index": 30036,
+          "activation": 283.98602294921875,
+          "description": "tech, Linux, and finance"
+        },
+        {
+          "index": 45346,
+          "activation": 196.29931640625,
+          "description": "specific technical terms"
+        },
+        {
+          "index": 49524,
+          "activation": 446.89080810546875,
+          "description": "until just combined"
+        },
+        {
+          "index": 50465,
+          "activation": 734.7871704101562,
+          "description": "thermodynamics laws and entropy"
+        },
+        {
+          "index": 58407,
+          "activation": 639.7424926757812,
+          "description": "items found inside"
+        }
+      ]
+    },
+    {
+      "position": 6,
+      "token_id": 5022,
+      "token": "␠states",
+      "l0": 68,
+      "active_features": [
+        {
+          "index": 26,
+          "activation": 248.45091247558594,
+          "description": "code generation"
+        },
+        {
+          "index": 341,
+          "activation": 433.662109375,
+          "description": "commas and punctuation"
+        },
+        {
+          "index": 461,
+          "activation": 859.978759765625,
+          "description": null
+        },
+        {
+          "index": 500,
+          "activation": 182.78744506835938,
+          "description": null
+        },
+        {
+          "index": 516,
+          "activation": 234.37948608398438,
+          "description": "indefinite articles"
+        },
+        {
+          "index": 592,
+          "activation": 336.27105712890625,
+          "description": "approximating quantities"
+        },
+        {
+          "index": 608,
+          "activation": 369.904296875,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 677,
+          "activation": 991.742431640625,
+          "description": "mathematical calculations and equations"
+        },
+        {
+          "index": 722,
+          "activation": 510.46246337890625,
+          "description": "theoretical physics concepts"
+        },
+        {
+          "index": 895,
+          "activation": 365.97100830078125,
+          "description": null
+        },
+        {
+          "index": 896,
+          "activation": 279.5977783203125,
+          "description": null
+        },
+        {
+          "index": 990,
+          "activation": 350.4525146484375,
+          "description": null
+        },
+        {
+          "index": 1226,
+          "activation": 328.5098876953125,
+          "description": "Chinese quotation marks"
+        },
+        {
+          "index": 1293,
+          "activation": 387.903564453125,
+          "description": "asking for more information"
+        },
+        {
+          "index": 1389,
+          "activation": 286.460205078125,
+          "description": "direction and orientation"
+        },
+        {
+          "index": 1429,
+          "activation": 466.42034912109375,
+          "description": "both refer"
+        },
+        {
+          "index": 1520,
+          "activation": 823.9056396484375,
+          "description": null
+        },
+        {
+          "index": 1580,
+          "activation": 392.14215087890625,
+          "description": "explains and describes concepts"
+        },
+        {
+          "index": 1643,
+          "activation": 3300.603759765625,
+          "description": "that"
+        },
+        {
+          "index": 1717,
+          "activation": 393.87677001953125,
+          "description": null
+        },
+        {
+          "index": 1731,
+          "activation": 633.5203857421875,
+          "description": "sorted alphabetically"
+        },
+        {
+          "index": 1854,
+          "activation": 1868.583740234375,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1981,
+          "activation": 797.6770629882812,
+          "description": null
+        },
+        {
+          "index": 2023,
+          "activation": 113.29949188232422,
+          "description": null
+        },
+        {
+          "index": 2128,
+          "activation": 431.11279296875,
+          "description": "input tensor and vector processing"
+        },
+        {
+          "index": 2316,
+          "activation": 508.82647705078125,
+          "description": null
+        },
+        {
+          "index": 2321,
+          "activation": 483.8890380859375,
+          "description": "less light"
+        },
+        {
+          "index": 2358,
+          "activation": 265.09027099609375,
+          "description": "atoms"
+        },
+        {
+          "index": 2509,
+          "activation": 394.82611083984375,
+          "description": null
+        },
+        {
+          "index": 2527,
+          "activation": 272.9403076171875,
+          "description": "particle physics"
+        },
+        {
+          "index": 2899,
+          "activation": 648.620849609375,
+          "description": null
+        },
+        {
+          "index": 3116,
+          "activation": 353.8845520019531,
+          "description": "amount and quantity"
+        },
+        {
+          "index": 3298,
+          "activation": 240.15892028808594,
+          "description": "the"
+        },
+        {
+          "index": 3309,
+          "activation": 538.8995971679688,
+          "description": "roots and solutions"
+        },
+        {
+          "index": 3329,
+          "activation": 417.6614990234375,
+          "description": "deal with, interact with"
+        },
+        {
+          "index": 3693,
+          "activation": 945.6075439453125,
+          "description": "quotation marks and enclosed phrases"
+        },
+        {
+          "index": 3883,
+          "activation": 776.1824340820312,
+          "description": "forces and power"
+        },
+        {
+          "index": 3971,
+          "activation": 667.9083862304688,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4171,
+          "activation": 196.12371826171875,
+          "description": "A, B, C, D labels"
+        },
+        {
+          "index": 4181,
+          "activation": 800.2862548828125,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4236,
+          "activation": 344.007568359375,
+          "description": "temperature, degrees, heat, thermostat"
+        },
+        {
+          "index": 4530,
+          "activation": 354.4317321777344,
+          "description": "put forward, into, together"
+        },
+        {
+          "index": 4845,
+          "activation": 205.02838134765625,
+          "description": "dynamically loads content body"
+        },
+        {
+          "index": 6418,
+          "activation": 335.8236389160156,
+          "description": "smart contract, smart cities, unit tests"
+        },
+        {
+          "index": 6524,
+          "activation": 1223.4427490234375,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 6849,
+          "activation": 379.6691589355469,
+          "description": "smithsonianmag.com links"
+        },
+        {
+          "index": 7347,
+          "activation": 527.3098754882812,
+          "description": "defines concepts and qualities"
+        },
+        {
+          "index": 8475,
+          "activation": 301.3917236328125,
+          "description": "air, wind, and weather"
+        },
+        {
+          "index": 9764,
+          "activation": 436.45947265625,
+          "description": "false positives and negatives"
+        },
+        {
+          "index": 10877,
+          "activation": 553.3516845703125,
+          "description": "simply put, in short"
+        },
+        {
+          "index": 15311,
+          "activation": 294.0025634765625,
+          "description": "substance abuse"
+        },
+        {
+          "index": 15781,
+          "activation": 520.4119873046875,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 17185,
+          "activation": 566.012939453125,
+          "description": "asking for information to start"
+        },
+        {
+          "index": 21306,
+          "activation": 352.91668701171875,
+          "description": "principles of"
+        },
+        {
+          "index": 21330,
+          "activation": 720.940185546875,
+          "description": "mental health"
+        },
+        {
+          "index": 21489,
+          "activation": 1237.608154296875,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 26018,
+          "activation": 376.9267578125,
+          "description": "sharp knife"
+        },
+        {
+          "index": 28429,
+          "activation": 246.09521484375,
+          "description": "ontology, conceive, postulate"
+        },
+        {
+          "index": 28782,
+          "activation": 247.04730224609375,
+          "description": "spacetime, smooth, curvature"
+        },
+        {
+          "index": 29259,
+          "activation": 295.70819091796875,
+          "description": "Prague, Old Town, code exceptions"
+        },
+        {
+          "index": 40370,
+          "activation": 959.16845703125,
+          "description": "css properties"
+        },
+        {
+          "index": 40987,
+          "activation": 715.3845825195312,
+          "description": "such that"
+        },
+        {
+          "index": 43003,
+          "activation": 250.748046875,
+          "description": "initial states or characteristics"
+        },
+        {
+          "index": 47440,
+          "activation": 254.49530029296875,
+          "description": "in general"
+        },
+        {
+          "index": 50230,
+          "activation": 269.386962890625,
+          "description": "energy and foreign language variations"
+        },
+        {
+          "index": 58942,
+          "activation": 395.8599853515625,
+          "description": "overwriting"
+        },
+        {
+          "index": 58994,
+          "activation": 369.1902160644531,
+          "description": "what am i"
+        },
+        {
+          "index": 62464,
+          "activation": 391.48126220703125,
+          "description": "mathematical definitions and proofs"
+        }
+      ]
+    },
+    {
+      "position": 7,
+      "token_id": 600,
+      "token": "␠that",
+      "l0": 99,
+      "active_features": [
+        {
+          "index": 89,
+          "activation": 307.90777587890625,
+          "description": "explanations followed by :"
+        },
+        {
+          "index": 274,
+          "activation": 576.314453125,
+          "description": "immediate help and health concerns"
+        },
+        {
+          "index": 341,
+          "activation": 402.0956726074219,
+          "description": "commas and punctuation"
+        },
+        {
+          "index": 359,
+          "activation": 345.2116394042969,
+          "description": "harm and accidents"
+        },
+        {
+          "index": 461,
+          "activation": 439.0859680175781,
+          "description": null
+        },
+        {
+          "index": 466,
+          "activation": 386.6981201171875,
+          "description": null
+        },
+        {
+          "index": 479,
+          "activation": 293.1154479980469,
+          "description": "-ics and -ical endings"
+        },
+        {
+          "index": 514,
+          "activation": 472.9680480957031,
+          "description": "explaining choices or options"
+        },
+        {
+          "index": 516,
+          "activation": 423.0558776855469,
+          "description": "indefinite articles"
+        },
+        {
+          "index": 526,
+          "activation": 420.5487060546875,
+          "description": "still ongoing states linguistics"
+        },
+        {
+          "index": 592,
+          "activation": 329.82208251953125,
+          "description": "approximating quantities"
+        },
+        {
+          "index": 608,
+          "activation": 457.3231201171875,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 677,
+          "activation": 667.6510009765625,
+          "description": "mathematical calculations and equations"
+        },
+        {
+          "index": 722,
+          "activation": 213.94940185546875,
+          "description": "theoretical physics concepts"
+        },
+        {
+          "index": 792,
+          "activation": 366.4289245605469,
+          "description": "as a classification"
+        },
+        {
+          "index": 895,
+          "activation": 836.4963989257812,
+          "description": null
+        },
+        {
+          "index": 1011,
+          "activation": 820.859619140625,
+          "description": "Final Answer"
+        },
+        {
+          "index": 1060,
+          "activation": 434.770751953125,
+          "description": "up to6 text numbers"
+        },
+        {
+          "index": 1389,
+          "activation": 368.90667724609375,
+          "description": "direction and orientation"
+        },
+        {
+          "index": 1441,
+          "activation": 274.1360778808594,
+          "description": "digit one"
+        },
+        {
+          "index": 1520,
+          "activation": 1426.5103759765625,
+          "description": null
+        },
+        {
+          "index": 1650,
+          "activation": 274.8605041503906,
+          "description": "help me understand best"
+        },
+        {
+          "index": 1717,
+          "activation": 337.2777099609375,
+          "description": null
+        },
+        {
+          "index": 1809,
+          "activation": 690.28515625,
+          "description": null
+        },
+        {
+          "index": 1854,
+          "activation": 2453.096923828125,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1958,
+          "activation": 361.65167236328125,
+          "description": null
+        },
+        {
+          "index": 1967,
+          "activation": 273.0924987792969,
+          "description": "role playing"
+        },
+        {
+          "index": 1971,
+          "activation": 324.880126953125,
+          "description": null
+        },
+        {
+          "index": 1981,
+          "activation": 359.41717529296875,
+          "description": null
+        },
+        {
+          "index": 2023,
+          "activation": 156.6109619140625,
+          "description": null
+        },
+        {
+          "index": 2228,
+          "activation": 367.90283203125,
+          "description": "electricity generation"
+        },
+        {
+          "index": 2290,
+          "activation": 708.3311767578125,
+          "description": "various types of information"
+        },
+        {
+          "index": 2316,
+          "activation": 383.88421630859375,
+          "description": null
+        },
+        {
+          "index": 2321,
+          "activation": 611.7532958984375,
+          "description": "less light"
+        },
+        {
+          "index": 2509,
+          "activation": 320.22845458984375,
+          "description": null
+        },
+        {
+          "index": 2644,
+          "activation": 190.41119384765625,
+          "description": "the math result"
+        },
+        {
+          "index": 2647,
+          "activation": 276.1988220214844,
+          "description": "steel, metal, and alloy properties"
+        },
+        {
+          "index": 2864,
+          "activation": 343.65301513671875,
+          "description": "constant or perpetual"
+        },
+        {
+          "index": 2899,
+          "activation": 631.491943359375,
+          "description": null
+        },
+        {
+          "index": 2936,
+          "activation": 242.30377197265625,
+          "description": "Subject, Title, Outline, followed by colon"
+        },
+        {
+          "index": 2964,
+          "activation": 320.97686767578125,
+          "description": "explaining why"
+        },
+        {
+          "index": 3000,
+          "activation": 247.81573486328125,
+          "description": "know or wonder if"
+        },
+        {
+          "index": 3114,
+          "activation": 461.07928466796875,
+          "description": "convection, coniferous"
+        },
+        {
+          "index": 3116,
+          "activation": 541.3009643554688,
+          "description": "amount and quantity"
+        },
+        {
+          "index": 3137,
+          "activation": 402.6925048828125,
+          "description": "description of strengths"
+        },
+        {
+          "index": 3298,
+          "activation": 674.5462036132812,
+          "description": "the"
+        },
+        {
+          "index": 3309,
+          "activation": 316.98828125,
+          "description": "roots and solutions"
+        },
+        {
+          "index": 3390,
+          "activation": 310.71209716796875,
+          "description": null
+        },
+        {
+          "index": 3423,
+          "activation": 470.7412414550781,
+          "description": "not when"
+        },
+        {
+          "index": 3543,
+          "activation": 765.5748901367188,
+          "description": "terms of service violations"
+        },
+        {
+          "index": 3693,
+          "activation": 1071.22705078125,
+          "description": "quotation marks and enclosed phrases"
+        },
+        {
+          "index": 3827,
+          "activation": 316.06304931640625,
+          "description": "how can I help"
+        },
+        {
+          "index": 3840,
+          "activation": 202.0897216796875,
+          "description": "handling input"
+        },
+        {
+          "index": 3883,
+          "activation": 886.4984130859375,
+          "description": "forces and power"
+        },
+        {
+          "index": 3971,
+          "activation": 519.6952514648438,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4181,
+          "activation": 1131.138671875,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4217,
+          "activation": 368.1651306152344,
+          "description": "in languages"
+        },
+        {
+          "index": 4236,
+          "activation": 271.82403564453125,
+          "description": "temperature, degrees, heat, thermostat"
+        },
+        {
+          "index": 4302,
+          "activation": 270.613037109375,
+          "description": "section markers"
+        },
+        {
+          "index": 4574,
+          "activation": 260.9030456542969,
+          "description": null
+        },
+        {
+          "index": 5220,
+          "activation": 311.37548828125,
+          "description": "estimates are approximate"
+        },
+        {
+          "index": 5418,
+          "activation": 462.0142517089844,
+          "description": "mathematical formulas and quantities"
+        },
+        {
+          "index": 5552,
+          "activation": 212.57162475585938,
+          "description": "abstract concepts and states"
+        },
+        {
+          "index": 6015,
+          "activation": 358.36395263671875,
+          "description": "conditions and triggers"
+        },
+        {
+          "index": 6086,
+          "activation": 652.083251953125,
+          "description": "sums and addition"
+        },
+        {
+          "index": 6219,
+          "activation": 316.5561218261719,
+          "description": "stress and mechanical properties"
+        },
+        {
+          "index": 6524,
+          "activation": 2704.6279296875,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 6601,
+          "activation": 298.1788330078125,
+          "description": "words ending in e"
+        },
+        {
+          "index": 7151,
+          "activation": 285.5531311035156,
+          "description": "slight"
+        },
+        {
+          "index": 7203,
+          "activation": 387.25042724609375,
+          "description": "base case edge case best case"
+        },
+        {
+          "index": 7347,
+          "activation": 536.436279296875,
+          "description": "defines concepts and qualities"
+        },
+        {
+          "index": 8504,
+          "activation": 196.56414794921875,
+          "description": "harmful stereotypes"
+        },
+        {
+          "index": 10179,
+          "activation": 255.21795654296875,
+          "description": "minimizing loss or cost functions"
+        },
+        {
+          "index": 10248,
+          "activation": 492.3470764160156,
+          "description": "punctuation followed by sentences"
+        },
+        {
+          "index": 10333,
+          "activation": 646.5258178710938,
+          "description": "positive reinforcement and appreciation"
+        },
+        {
+          "index": 13069,
+          "activation": 390.369140625,
+          "description": "limiting electrical current"
+        },
+        {
+          "index": 15781,
+          "activation": 1637.8660888671875,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 19038,
+          "activation": 368.91339111328125,
+          "description": "is useful or important"
+        },
+        {
+          "index": 21489,
+          "activation": 2041.943603515625,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 21524,
+          "activation": 360.8970642089844,
+          "description": "finding patterns"
+        },
+        {
+          "index": 22531,
+          "activation": 379.7583312988281,
+          "description": "in your"
+        },
+        {
+          "index": 23103,
+          "activation": 436.00250244140625,
+          "description": "heat transfer"
+        },
+        {
+          "index": 23997,
+          "activation": 510.7301025390625,
+          "description": "velocity vector"
+        },
+        {
+          "index": 25805,
+          "activation": 277.5722961425781,
+          "description": "words starting with E"
+        },
+        {
+          "index": 26536,
+          "activation": 442.8013916015625,
+          "description": "copyright notices and footers"
+        },
+        {
+          "index": 28094,
+          "activation": 373.6897277832031,
+          "description": "video or slide titles"
+        },
+        {
+          "index": 28782,
+          "activation": 343.3106689453125,
+          "description": "spacetime, smooth, curvature"
+        },
+        {
+          "index": 29479,
+          "activation": 402.4232177734375,
+          "description": "it's okay to feel"
+        },
+        {
+          "index": 33895,
+          "activation": 262.04644775390625,
+          "description": "have any questions"
+        },
+        {
+          "index": 33991,
+          "activation": 381.2733154296875,
+          "description": "listening on port"
+        },
+        {
+          "index": 34747,
+          "activation": 439.2876281738281,
+          "description": "applied electric fields"
+        },
+        {
+          "index": 35866,
+          "activation": 412.08929443359375,
+          "description": "discrete units or packets"
+        },
+        {
+          "index": 43188,
+          "activation": 300.0712585449219,
+          "description": "IT operations support"
+        },
+        {
+          "index": 45353,
+          "activation": 409.8470458984375,
+          "description": "finding specific criteria"
+        },
+        {
+          "index": 47440,
+          "activation": 232.80267333984375,
+          "description": "in general"
+        },
+        {
+          "index": 50230,
+          "activation": 350.33392333984375,
+          "description": "energy and foreign language variations"
+        },
+        {
+          "index": 50465,
+          "activation": 755.1862182617188,
+          "description": "thermodynamics laws and entropy"
+        },
+        {
+          "index": 60714,
+          "activation": 446.62200927734375,
+          "description": "sql create table"
+        },
+        {
+          "index": 62464,
+          "activation": 408.08563232421875,
+          "description": "mathematical definitions and proofs"
+        }
+      ]
+    },
+    {
+      "position": 8,
+      "token_id": 2778,
+      "token": "␠energy",
+      "l0": 85,
+      "active_features": [
+        {
+          "index": 105,
+          "activation": 438.92193603515625,
+          "description": "abstract concepts and foreign words"
+        },
+        {
+          "index": 160,
+          "activation": 323.054443359375,
+          "description": "add or include"
+        },
+        {
+          "index": 195,
+          "activation": 341.3772888183594,
+          "description": null
+        },
+        {
+          "index": 207,
+          "activation": 328.8162841796875,
+          "description": "programming languages"
+        },
+        {
+          "index": 274,
+          "activation": 1076.396728515625,
+          "description": "immediate help and health concerns"
+        },
+        {
+          "index": 278,
+          "activation": 376.6172180175781,
+          "description": "explaining why"
+        },
+        {
+          "index": 341,
+          "activation": 140.10317993164062,
+          "description": "commas and punctuation"
+        },
+        {
+          "index": 370,
+          "activation": 393.30364990234375,
+          "description": "global scope and multilingualism"
+        },
+        {
+          "index": 409,
+          "activation": 453.5550537109375,
+          "description": "Swagger uses"
+        },
+        {
+          "index": 412,
+          "activation": 390.913818359375,
+          "description": null
+        },
+        {
+          "index": 419,
+          "activation": 269.10174560546875,
+          "description": "Jewish culture and Israel"
+        },
+        {
+          "index": 500,
+          "activation": 815.9131469726562,
+          "description": null
+        },
+        {
+          "index": 516,
+          "activation": 204.44915771484375,
+          "description": "indefinite articles"
+        },
+        {
+          "index": 530,
+          "activation": 260.3299560546875,
+          "description": "complex, serious, or correct information"
+        },
+        {
+          "index": 594,
+          "activation": 371.8888244628906,
+          "description": "specific domain principles"
+        },
+        {
+          "index": 608,
+          "activation": 657.836181640625,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 709,
+          "activation": 306.5418701171875,
+          "description": "depends on factors"
+        },
+        {
+          "index": 722,
+          "activation": 354.20550537109375,
+          "description": "theoretical physics concepts"
+        },
+        {
+          "index": 965,
+          "activation": 223.65074157714844,
+          "description": "TypeScript Angular imports"
+        },
+        {
+          "index": 1307,
+          "activation": 397.162353515625,
+          "description": "Metacognition"
+        },
+        {
+          "index": 1404,
+          "activation": 374.36737060546875,
+          "description": "quality and capability descriptors"
+        },
+        {
+          "index": 1520,
+          "activation": 813.0,
+          "description": null
+        },
+        {
+          "index": 1609,
+          "activation": 1615.650146484375,
+          "description": "concentration levels"
+        },
+        {
+          "index": 1665,
+          "activation": 783.7059326171875,
+          "description": null
+        },
+        {
+          "index": 1682,
+          "activation": 280.4078369140625,
+          "description": "code documentation snippets"
+        },
+        {
+          "index": 1717,
+          "activation": 404.34503173828125,
+          "description": null
+        },
+        {
+          "index": 1854,
+          "activation": 998.3886108398438,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1954,
+          "activation": 410.32537841796875,
+          "description": "negations and contrasts"
+        },
+        {
+          "index": 1981,
+          "activation": 651.8593139648438,
+          "description": null
+        },
+        {
+          "index": 2000,
+          "activation": 1434.0323486328125,
+          "description": null
+        },
+        {
+          "index": 2052,
+          "activation": 303.79376220703125,
+          "description": "Earth's shape and structured data"
+        },
+        {
+          "index": 2228,
+          "activation": 288.62158203125,
+          "description": "electricity generation"
+        },
+        {
+          "index": 2321,
+          "activation": 523.03955078125,
+          "description": "less light"
+        },
+        {
+          "index": 2376,
+          "activation": 271.3742980957031,
+          "description": null
+        },
+        {
+          "index": 2394,
+          "activation": 359.4381408691406,
+          "description": "stop"
+        },
+        {
+          "index": 2485,
+          "activation": 312.935546875,
+          "description": null
+        },
+        {
+          "index": 2509,
+          "activation": 252.98806762695312,
+          "description": null
+        },
+        {
+          "index": 2527,
+          "activation": 281.54803466796875,
+          "description": "particle physics"
+        },
+        {
+          "index": 2549,
+          "activation": 1775.7900390625,
+          "description": null
+        },
+        {
+          "index": 2564,
+          "activation": 700.6712646484375,
+          "description": "resource allocation"
+        },
+        {
+          "index": 2922,
+          "activation": 233.57470703125,
+          "description": "down into"
+        },
+        {
+          "index": 3357,
+          "activation": 405.50970458984375,
+          "description": "i will"
+        },
+        {
+          "index": 3377,
+          "activation": 341.8004150390625,
+          "description": "three dimensions, volunteer force"
+        },
+        {
+          "index": 3390,
+          "activation": 584.5982666015625,
+          "description": null
+        },
+        {
+          "index": 3448,
+          "activation": 262.80755615234375,
+          "description": "conversation and discussion"
+        },
+        {
+          "index": 3550,
+          "activation": 753.328857421875,
+          "description": "i don't"
+        },
+        {
+          "index": 3669,
+          "activation": 291.13037109375,
+          "description": "stable, unchanged, secure, or fixed"
+        },
+        {
+          "index": 3693,
+          "activation": 323.0531921386719,
+          "description": "quotation marks and enclosed phrases"
+        },
+        {
+          "index": 3883,
+          "activation": 555.6856689453125,
+          "description": "forces and power"
+        },
+        {
+          "index": 3971,
+          "activation": 307.06060791015625,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4054,
+          "activation": 318.60931396484375,
+          "description": "tension and chaos"
+        },
+        {
+          "index": 4181,
+          "activation": 1340.1834716796875,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4217,
+          "activation": 321.4358825683594,
+          "description": "in languages"
+        },
+        {
+          "index": 4302,
+          "activation": 343.77862548828125,
+          "description": "section markers"
+        },
+        {
+          "index": 4770,
+          "activation": 331.71832275390625,
+          "description": "mathematical relations and structures"
+        },
+        {
+          "index": 4855,
+          "activation": 391.5341491699219,
+          "description": "official links"
+        },
+        {
+          "index": 5220,
+          "activation": 353.02838134765625,
+          "description": "estimates are approximate"
+        },
+        {
+          "index": 5602,
+          "activation": 376.3786315917969,
+          "description": "past trauma and stress"
+        },
+        {
+          "index": 5681,
+          "activation": 322.3731994628906,
+          "description": "minimizing, maximizing, optimizing, prioritizing"
+        },
+        {
+          "index": 6086,
+          "activation": 612.0709838867188,
+          "description": "sums and addition"
+        },
+        {
+          "index": 6524,
+          "activation": 1430.2567138671875,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 8947,
+          "activation": 331.0943908691406,
+          "description": "asking for details"
+        },
+        {
+          "index": 8979,
+          "activation": 378.89990234375,
+          "description": "pause followed by comma"
+        },
+        {
+          "index": 9797,
+          "activation": 494.1493225097656,
+          "description": "power followed by specific terms"
+        },
+        {
+          "index": 9976,
+          "activation": 398.3939514160156,
+          "description": "food storage and safety"
+        },
+        {
+          "index": 10333,
+          "activation": 799.1854858398438,
+          "description": "positive reinforcement and appreciation"
+        },
+        {
+          "index": 11409,
+          "activation": 357.74346923828125,
+          "description": "error handling"
+        },
+        {
+          "index": 11641,
+          "activation": 453.2710876464844,
+          "description": "cancellation and script"
+        },
+        {
+          "index": 12515,
+          "activation": 321.3771667480469,
+          "description": "necessity and obligation"
+        },
+        {
+          "index": 13387,
+          "activation": 333.4679870605469,
+          "description": "job postings or descriptions"
+        },
+        {
+          "index": 15248,
+          "activation": 283.49444580078125,
+          "description": "specific details"
+        },
+        {
+          "index": 15781,
+          "activation": 996.0645751953125,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 16964,
+          "activation": 358.094482421875,
+          "description": "be available/willing/open"
+        },
+        {
+          "index": 19261,
+          "activation": 308.6615905761719,
+          "description": "always, never, or almost always"
+        },
+        {
+          "index": 20213,
+          "activation": 372.0128173828125,
+          "description": "receive support or information"
+        },
+        {
+          "index": 21489,
+          "activation": 1114.5672607421875,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 21781,
+          "activation": 412.5016174316406,
+          "description": "formation and gravity"
+        },
+        {
+          "index": 23231,
+          "activation": 1893.293701171875,
+          "description": "energy levels"
+        },
+        {
+          "index": 26536,
+          "activation": 490.9685363769531,
+          "description": "copyright notices and footers"
+        },
+        {
+          "index": 43189,
+          "activation": 288.9805603027344,
+          "description": "bar or bars"
+        },
+        {
+          "index": 43542,
+          "activation": 936.4058837890625,
+          "description": "most common ways"
+        },
+        {
+          "index": 45028,
+          "activation": 248.38705444335938,
+          "description": "list, sorted lists"
+        },
+        {
+          "index": 48038,
+          "activation": 536.274169921875,
+          "description": "objects moving or traveling"
+        },
+        {
+          "index": 50465,
+          "activation": 1980.050048828125,
+          "description": "thermodynamics laws and entropy"
+        },
+        {
+          "index": 50568,
+          "activation": 370.2452392578125,
+          "description": "database operations"
+        }
+      ]
+    },
+    {
+      "position": 9,
+      "token_id": 3914,
+      "token": "␠cannot",
+      "l0": 87,
+      "active_features": [
+        {
+          "index": 127,
+          "activation": 408.742431640625,
+          "description": "to followed by a verb"
+        },
+        {
+          "index": 256,
+          "activation": 1646.43212890625,
+          "description": "can be or happen"
+        },
+        {
+          "index": 266,
+          "activation": 639.986083984375,
+          "description": "don't matter"
+        },
+        {
+          "index": 274,
+          "activation": 539.37255859375,
+          "description": "immediate help and health concerns"
+        },
+        {
+          "index": 279,
+          "activation": 259.8208312988281,
+          "description": "math expressions"
+        },
+        {
+          "index": 309,
+          "activation": 513.5140991210938,
+          "description": "reefs act"
+        },
+        {
+          "index": 500,
+          "activation": 464.15484619140625,
+          "description": null
+        },
+        {
+          "index": 530,
+          "activation": 562.5677490234375,
+          "description": "complex, serious, or correct information"
+        },
+        {
+          "index": 536,
+          "activation": 1155.4886474609375,
+          "description": "comp and back"
+        },
+        {
+          "index": 608,
+          "activation": 393.3924560546875,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 722,
+          "activation": 557.9696655273438,
+          "description": "theoretical physics concepts"
+        },
+        {
+          "index": 804,
+          "activation": 1750.804443359375,
+          "description": null
+        },
+        {
+          "index": 971,
+          "activation": 437.1903381347656,
+          "description": null
+        },
+        {
+          "index": 1180,
+          "activation": 413.6264953613281,
+          "description": "real-world and real-time events"
+        },
+        {
+          "index": 1211,
+          "activation": 1497.3309326171875,
+          "description": "you can tell me"
+        },
+        {
+          "index": 1223,
+          "activation": 1061.1552734375,
+          "description": null
+        },
+        {
+          "index": 1244,
+          "activation": 343.32489013671875,
+          "description": "technical terms and definitions"
+        },
+        {
+          "index": 1294,
+          "activation": 456.0804443359375,
+          "description": "don't worry"
+        },
+        {
+          "index": 1306,
+          "activation": 363.1951599121094,
+          "description": "say goodbye"
+        },
+        {
+          "index": 1411,
+          "activation": 305.1334228515625,
+          "description": "prompting for more details"
+        },
+        {
+          "index": 1520,
+          "activation": 403.51409912109375,
+          "description": null
+        },
+        {
+          "index": 1609,
+          "activation": 643.7080688476562,
+          "description": "concentration levels"
+        },
+        {
+          "index": 1625,
+          "activation": 421.17010498046875,
+          "description": "understand or comprehend"
+        },
+        {
+          "index": 1717,
+          "activation": 480.84161376953125,
+          "description": null
+        },
+        {
+          "index": 1854,
+          "activation": 771.0772094726562,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1889,
+          "activation": 733.0379638671875,
+          "description": "multilingual non-English words"
+        },
+        {
+          "index": 1895,
+          "activation": 283.97589111328125,
+          "description": null
+        },
+        {
+          "index": 1899,
+          "activation": 295.33135986328125,
+          "description": "impressive surprising interesting"
+        },
+        {
+          "index": 1954,
+          "activation": 544.8377075195312,
+          "description": "negations and contrasts"
+        },
+        {
+          "index": 1981,
+          "activation": 749.4920043945312,
+          "description": null
+        },
+        {
+          "index": 2000,
+          "activation": 272.1121826171875,
+          "description": null
+        },
+        {
+          "index": 2101,
+          "activation": 387.7908020019531,
+          "description": "state changes or growth"
+        },
+        {
+          "index": 2170,
+          "activation": 399.2092590332031,
+          "description": "Thank you"
+        },
+        {
+          "index": 2202,
+          "activation": 493.14825439453125,
+          "description": "followed by"
+        },
+        {
+          "index": 2290,
+          "activation": 332.61279296875,
+          "description": "various types of information"
+        },
+        {
+          "index": 2454,
+          "activation": 340.189208984375,
+          "description": null
+        },
+        {
+          "index": 2484,
+          "activation": 427.2120361328125,
+          "description": null
+        },
+        {
+          "index": 2527,
+          "activation": 589.9537353515625,
+          "description": "particle physics"
+        },
+        {
+          "index": 2549,
+          "activation": 429.616943359375,
+          "description": null
+        },
+        {
+          "index": 2564,
+          "activation": 341.05865478515625,
+          "description": "resource allocation"
+        },
+        {
+          "index": 2622,
+          "activation": 2479.1240234375,
+          "description": "modal verbs to be"
+        },
+        {
+          "index": 2735,
+          "activation": 785.0188598632812,
+          "description": "Please provide"
+        },
+        {
+          "index": 2803,
+          "activation": 417.7680358886719,
+          "description": "key improvements and explanations"
+        },
+        {
+          "index": 2805,
+          "activation": 380.29827880859375,
+          "description": "allow yourself"
+        },
+        {
+          "index": 3080,
+          "activation": 357.6124572753906,
+          "description": "Game Changer"
+        },
+        {
+          "index": 3287,
+          "activation": 165.09910583496094,
+          "description": "energy followed by parentheses"
+        },
+        {
+          "index": 3469,
+          "activation": 281.2382507324219,
+          "description": null
+        },
+        {
+          "index": 3748,
+          "activation": 277.1381530761719,
+          "description": "models and related projects"
+        },
+        {
+          "index": 3883,
+          "activation": 416.7293395996094,
+          "description": "forces and power"
+        },
+        {
+          "index": 4181,
+          "activation": 1203.8519287109375,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4217,
+          "activation": 213.1751708984375,
+          "description": "in languages"
+        },
+        {
+          "index": 4258,
+          "activation": 311.2840270996094,
+          "description": "offering alternatives to requests"
+        },
+        {
+          "index": 4282,
+          "activation": 312.4146423339844,
+          "description": "violence and hotlines"
+        },
+        {
+          "index": 4374,
+          "activation": 809.1314697265625,
+          "description": "cannot lead, cannot change"
+        },
+        {
+          "index": 4702,
+          "activation": 330.7421875,
+          "description": "Russian, completion, time"
+        },
+        {
+          "index": 4887,
+          "activation": 378.8797607421875,
+          "description": "disclaimers or warnings"
+        },
+        {
+          "index": 5575,
+          "activation": 350.77471923828125,
+          "description": "due diligence, receive information, sharing lifestyle"
+        },
+        {
+          "index": 6524,
+          "activation": 667.4901123046875,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 7063,
+          "activation": 390.043701171875,
+          "description": "creation or create"
+        },
+        {
+          "index": 7245,
+          "activation": 321.7999267578125,
+          "description": "real estate"
+        },
+        {
+          "index": 8872,
+          "activation": 329.9189453125,
+          "description": "science"
+        },
+        {
+          "index": 9599,
+          "activation": 312.8831787109375,
+          "description": "wave propagation and scattering"
+        },
+        {
+          "index": 9603,
+          "activation": 485.374267578125,
+          "description": "time travel and timelines"
+        },
+        {
+          "index": 9816,
+          "activation": 303.32574462890625,
+          "description": "both"
+        },
+        {
+          "index": 9976,
+          "activation": 346.6463317871094,
+          "description": "food storage and safety"
+        },
+        {
+          "index": 10333,
+          "activation": 567.0517578125,
+          "description": "positive reinforcement and appreciation"
+        },
+        {
+          "index": 12137,
+          "activation": 416.8463134765625,
+          "description": "json code blocks"
+        },
+        {
+          "index": 13257,
+          "activation": 401.4397888183594,
+          "description": "constantly adapting and evolving"
+        },
+        {
+          "index": 15189,
+          "activation": 371.4085998535156,
+          "description": "is given by"
+        },
+        {
+          "index": 15400,
+          "activation": 977.2000122070312,
+          "description": "not constitute"
+        },
+        {
+          "index": 15642,
+          "activation": 395.5270080566406,
+          "description": "algorithmic complexity and big O notation"
+        },
+        {
+          "index": 15781,
+          "activation": 636.2564697265625,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 15851,
+          "activation": 384.15130615234375,
+          "description": "defines an agent role"
+        },
+        {
+          "index": 18162,
+          "activation": 382.3680114746094,
+          "description": "comparison, relation, or effect"
+        },
+        {
+          "index": 18563,
+          "activation": 463.73779296875,
+          "description": "breaking rules or boundaries"
+        },
+        {
+          "index": 20975,
+          "activation": 356.1542053222656,
+          "description": "roles and positions"
+        },
+        {
+          "index": 21489,
+          "activation": 635.826171875,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 23231,
+          "activation": 427.8126220703125,
+          "description": "energy levels"
+        },
+        {
+          "index": 25678,
+          "activation": 350.4815673828125,
+          "description": "feelings of distress or crisis"
+        },
+        {
+          "index": 26174,
+          "activation": 324.98040771484375,
+          "description": "not just"
+        },
+        {
+          "index": 32779,
+          "activation": 488.59368896484375,
+          "description": "give credit"
+        },
+        {
+          "index": 39006,
+          "activation": 441.286865234375,
+          "description": "spacetime and gravity"
+        },
+        {
+          "index": 48113,
+          "activation": 895.6250610351562,
+          "description": "instructions to run python scripts"
+        },
+        {
+          "index": 48479,
+          "activation": 337.9702453613281,
+          "description": "placeholders in brackets"
+        },
+        {
+          "index": 50465,
+          "activation": 877.4453735351562,
+          "description": "thermodynamics laws and entropy"
+        },
+        {
+          "index": 60332,
+          "activation": 412.98553466796875,
+          "description": "hypothesized fundamental force or field"
+        },
+        {
+          "index": 64493,
+          "activation": 689.7459106445312,
+          "description": "places, ideas, or actions"
+        }
+      ]
+    },
+    {
+      "position": 10,
+      "token_id": 577,
+      "token": "␠be",
+      "l0": 117,
+      "active_features": [
+        {
+          "index": 35,
+          "activation": 694.2363891601562,
+          "description": "destroy, disrupt, undermine"
+        },
+        {
+          "index": 76,
+          "activation": 2091.1767578125,
+          "description": "origin and creation"
+        },
+        {
+          "index": 105,
+          "activation": 340.7247619628906,
+          "description": "abstract concepts and foreign words"
+        },
+        {
+          "index": 207,
+          "activation": 326.40252685546875,
+          "description": "programming languages"
+        },
+        {
+          "index": 274,
+          "activation": 666.08984375,
+          "description": "immediate help and health concerns"
+        },
+        {
+          "index": 279,
+          "activation": 165.09603881835938,
+          "description": "math expressions"
+        },
+        {
+          "index": 309,
+          "activation": 318.73797607421875,
+          "description": "reefs act"
+        },
+        {
+          "index": 324,
+          "activation": 405.65191650390625,
+          "description": null
+        },
+        {
+          "index": 530,
+          "activation": 1534.5286865234375,
+          "description": "complex, serious, or correct information"
+        },
+        {
+          "index": 608,
+          "activation": 449.549072265625,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 624,
+          "activation": 360.7872314453125,
+          "description": "temperature and measurement"
+        },
+        {
+          "index": 722,
+          "activation": 541.3937377929688,
+          "description": "theoretical physics concepts"
+        },
+        {
+          "index": 847,
+          "activation": 397.4505615234375,
+          "description": "not present"
+        },
+        {
+          "index": 971,
+          "activation": 131.20806884765625,
+          "description": null
+        },
+        {
+          "index": 1051,
+          "activation": 274.9979248046875,
+          "description": "sharing information and positive impact"
+        },
+        {
+          "index": 1062,
+          "activation": 575.8002319335938,
+          "description": "bash commands and 988"
+        },
+        {
+          "index": 1083,
+          "activation": 245.8360137939453,
+          "description": "or presenting alternatives"
+        },
+        {
+          "index": 1138,
+          "activation": 2213.9814453125,
+          "description": "state or outcome"
+        },
+        {
+          "index": 1165,
+          "activation": 292.3963623046875,
+          "description": "model responding to user queries"
+        },
+        {
+          "index": 1223,
+          "activation": 1391.4951171875,
+          "description": null
+        },
+        {
+          "index": 1278,
+          "activation": 468.27056884765625,
+          "description": null
+        },
+        {
+          "index": 1306,
+          "activation": 552.4549560546875,
+          "description": "say goodbye"
+        },
+        {
+          "index": 1389,
+          "activation": 257.31817626953125,
+          "description": "direction and orientation"
+        },
+        {
+          "index": 1520,
+          "activation": 815.5931396484375,
+          "description": null
+        },
+        {
+          "index": 1609,
+          "activation": 563.2175903320312,
+          "description": "concentration levels"
+        },
+        {
+          "index": 1625,
+          "activation": 308.752685546875,
+          "description": "understand or comprehend"
+        },
+        {
+          "index": 1717,
+          "activation": 372.4874267578125,
+          "description": null
+        },
+        {
+          "index": 1737,
+          "activation": 301.7420654296875,
+          "description": null
+        },
+        {
+          "index": 1810,
+          "activation": 333.4978332519531,
+          "description": "new followed by locations, beginnings, or technologies"
+        },
+        {
+          "index": 1854,
+          "activation": 831.0595092773438,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1875,
+          "activation": 294.54119873046875,
+          "description": null
+        },
+        {
+          "index": 1889,
+          "activation": 387.89691162109375,
+          "description": "multilingual non-English words"
+        },
+        {
+          "index": 1940,
+          "activation": 638.0795288085938,
+          "description": null
+        },
+        {
+          "index": 1954,
+          "activation": 399.8651123046875,
+          "description": "negations and contrasts"
+        },
+        {
+          "index": 1981,
+          "activation": 1187.899169921875,
+          "description": null
+        },
+        {
+          "index": 2140,
+          "activation": 255.6038818359375,
+          "description": "no [adjective/noun]"
+        },
+        {
+          "index": 2290,
+          "activation": 486.40679931640625,
+          "description": "various types of information"
+        },
+        {
+          "index": 2321,
+          "activation": 519.9080810546875,
+          "description": "less light"
+        },
+        {
+          "index": 2358,
+          "activation": 265.13885498046875,
+          "description": "atoms"
+        },
+        {
+          "index": 2408,
+          "activation": 1173.923583984375,
+          "description": "be followed by descriptive adverbs or participles"
+        },
+        {
+          "index": 2549,
+          "activation": 347.86279296875,
+          "description": null
+        },
+        {
+          "index": 2564,
+          "activation": 665.9239501953125,
+          "description": "resource allocation"
+        },
+        {
+          "index": 2607,
+          "activation": 252.105712890625,
+          "description": "programming libraries and modules"
+        },
+        {
+          "index": 2622,
+          "activation": 274.9448547363281,
+          "description": "modal verbs to be"
+        },
+        {
+          "index": 2639,
+          "activation": 393.492431640625,
+          "description": "bold text and code blocks"
+        },
+        {
+          "index": 3080,
+          "activation": 392.1529541015625,
+          "description": "Game Changer"
+        },
+        {
+          "index": 3167,
+          "activation": 294.01104736328125,
+          "description": "emotional expression"
+        },
+        {
+          "index": 3189,
+          "activation": 717.755859375,
+          "description": "is widely considered or required"
+        },
+        {
+          "index": 3325,
+          "activation": 263.8610534667969,
+          "description": "code and programming terms"
+        },
+        {
+          "index": 3332,
+          "activation": 319.21978759765625,
+          "description": "wikipedia links"
+        },
+        {
+          "index": 3693,
+          "activation": 306.8703308105469,
+          "description": "quotation marks and enclosed phrases"
+        },
+        {
+          "index": 3883,
+          "activation": 621.0510864257812,
+          "description": "forces and power"
+        },
+        {
+          "index": 3936,
+          "activation": 363.6963195800781,
+          "description": "time in minutes"
+        },
+        {
+          "index": 4169,
+          "activation": 423.567138671875,
+          "description": "pull request"
+        },
+        {
+          "index": 4181,
+          "activation": 1316.8782958984375,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4374,
+          "activation": 800.6634521484375,
+          "description": "cannot lead, cannot change"
+        },
+        {
+          "index": 4378,
+          "activation": 334.2120361328125,
+          "description": "neural networks, lean forward"
+        },
+        {
+          "index": 4887,
+          "activation": 583.1560668945312,
+          "description": "disclaimers or warnings"
+        },
+        {
+          "index": 5243,
+          "activation": 643.6129150390625,
+          "description": "identifying audience, subject, or purpose"
+        },
+        {
+          "index": 5264,
+          "activation": 463.24560546875,
+          "description": "automatic tracking"
+        },
+        {
+          "index": 5368,
+          "activation": 319.24530029296875,
+          "description": "cm to milliliters"
+        },
+        {
+          "index": 5681,
+          "activation": 330.0971374511719,
+          "description": "minimizing, maximizing, optimizing, prioritizing"
+        },
+        {
+          "index": 5726,
+          "activation": 489.6719970703125,
+          "description": "both sides"
+        },
+        {
+          "index": 5785,
+          "activation": 471.1017761230469,
+          "description": "any of these points"
+        },
+        {
+          "index": 6086,
+          "activation": 326.08526611328125,
+          "description": "sums and addition"
+        },
+        {
+          "index": 6117,
+          "activation": 279.00396728515625,
+          "description": "introducing a breakdown"
+        },
+        {
+          "index": 6524,
+          "activation": 963.7867431640625,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 6686,
+          "activation": 323.83282470703125,
+          "description": "permission and consent"
+        },
+        {
+          "index": 7006,
+          "activation": 397.9659423828125,
+          "description": "dynamic performance and design"
+        },
+        {
+          "index": 7063,
+          "activation": 1154.6650390625,
+          "description": "creation or create"
+        },
+        {
+          "index": 7452,
+          "activation": 382.8927307128906,
+          "description": "convert, linear, percentage, easiest, 1"
+        },
+        {
+          "index": 7491,
+          "activation": 325.8175048828125,
+          "description": "building muscle and structure"
+        },
+        {
+          "index": 7508,
+          "activation": 916.2549438476562,
+          "description": "digital painting, estimated steps"
+        },
+        {
+          "index": 8979,
+          "activation": 381.93084716796875,
+          "description": "pause followed by comma"
+        },
+        {
+          "index": 9576,
+          "activation": 435.21734619140625,
+          "description": "production and sale of goods"
+        },
+        {
+          "index": 9599,
+          "activation": 478.73211669921875,
+          "description": "wave propagation and scattering"
+        },
+        {
+          "index": 9603,
+          "activation": 290.67413330078125,
+          "description": "time travel and timelines"
+        },
+        {
+          "index": 9618,
+          "activation": 1220.9295654296875,
+          "description": "negation followed by nuance"
+        },
+        {
+          "index": 9764,
+          "activation": 299.64501953125,
+          "description": "false positives and negatives"
+        },
+        {
+          "index": 9816,
+          "activation": 355.4945068359375,
+          "description": "both"
+        },
+        {
+          "index": 10333,
+          "activation": 895.8732299804688,
+          "description": "positive reinforcement and appreciation"
+        },
+        {
+          "index": 11030,
+          "activation": 318.7880554199219,
+          "description": "skills and entry-level tech access"
+        },
+        {
+          "index": 11380,
+          "activation": 323.3967590332031,
+          "description": "Talk 3 or talk to"
+        },
+        {
+          "index": 14735,
+          "activation": 500.00115966796875,
+          "description": "dart programming language"
+        },
+        {
+          "index": 15400,
+          "activation": 418.447998046875,
+          "description": "not constitute"
+        },
+        {
+          "index": 15715,
+          "activation": 345.1669006347656,
+          "description": "general guidance only"
+        },
+        {
+          "index": 15781,
+          "activation": 940.7171020507812,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 16359,
+          "activation": 273.6209716796875,
+          "description": "up to"
+        },
+        {
+          "index": 17049,
+          "activation": 350.4588317871094,
+          "description": "unforeseen, back up"
+        },
+        {
+          "index": 17124,
+          "activation": 492.1550598144531,
+          "description": "best fits"
+        },
+        {
+          "index": 18233,
+          "activation": 558.0711669921875,
+          "description": "is Key, King"
+        },
+        {
+          "index": 18363,
+          "activation": 464.03497314453125,
+          "description": "a blur of dark whisper"
+        },
+        {
+          "index": 18761,
+          "activation": 361.9183044433594,
+          "description": "active listening"
+        },
+        {
+          "index": 20813,
+          "activation": 208.73828125,
+          "description": "documentation and forms"
+        },
+        {
+          "index": 20975,
+          "activation": 405.8243103027344,
+          "description": "roles and positions"
+        },
+        {
+          "index": 21489,
+          "activation": 839.8131103515625,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 22335,
+          "activation": 395.85748291015625,
+          "description": "gracefully .,"
+        },
+        {
+          "index": 23231,
+          "activation": 469.337890625,
+          "description": "energy levels"
+        },
+        {
+          "index": 26174,
+          "activation": 763.6176147460938,
+          "description": "not just"
+        },
+        {
+          "index": 27678,
+          "activation": 605.863525390625,
+          "description": "me:"
+        },
+        {
+          "index": 29770,
+          "activation": 530.7289428710938,
+          "description": "other hand"
+        },
+        {
+          "index": 32121,
+          "activation": 493.9914245605469,
+          "description": "to local support"
+        },
+        {
+          "index": 32407,
+          "activation": 434.2644348144531,
+          "description": "reducing or absorbing"
+        },
+        {
+          "index": 32977,
+          "activation": 430.71502685546875,
+          "description": "me understand"
+        },
+        {
+          "index": 36728,
+          "activation": 326.4639892578125,
+          "description": "joining path components"
+        },
+        {
+          "index": 39006,
+          "activation": 439.0859375,
+          "description": "spacetime and gravity"
+        },
+        {
+          "index": 39996,
+          "activation": 347.5056457519531,
+          "description": "Psychology Today"
+        },
+        {
+          "index": 41380,
+          "activation": 405.556396484375,
+          "description": "loss"
+        },
+        {
+          "index": 46941,
+          "activation": 283.01422119140625,
+          "description": "a more"
+        },
+        {
+          "index": 47847,
+          "activation": 319.3797607421875,
+          "description": "I hope and tried"
+        },
+        {
+          "index": 48038,
+          "activation": 342.59600830078125,
+          "description": "objects moving or traveling"
+        },
+        {
+          "index": 48113,
+          "activation": 462.00054931640625,
+          "description": "instructions to run python scripts"
+        },
+        {
+          "index": 50465,
+          "activation": 732.8128051757812,
+          "description": "thermodynamics laws and entropy"
+        },
+        {
+          "index": 51092,
+          "activation": 329.0559997558594,
+          "description": "The future, only, greatest, journey, most"
+        },
+        {
+          "index": 57884,
+          "activation": 442.5063171386719,
+          "description": "calculation with division/multiplication"
+        },
+        {
+          "index": 60332,
+          "activation": 298.91925048828125,
+          "description": "hypothesized fundamental force or field"
+        },
+        {
+          "index": 60714,
+          "activation": 496.3118896484375,
+          "description": "sql create table"
+        }
+      ]
+    },
+    {
+      "position": 11,
+      "token_id": 4464,
+      "token": "␠created",
+      "l0": 73,
+      "active_features": [
+        {
+          "index": 35,
+          "activation": 354.0037841796875,
+          "description": "destroy, disrupt, undermine"
+        },
+        {
+          "index": 72,
+          "activation": 346.7806396484375,
+          "description": "built-in"
+        },
+        {
+          "index": 274,
+          "activation": 693.4229125976562,
+          "description": "immediate help and health concerns"
+        },
+        {
+          "index": 341,
+          "activation": 361.44952392578125,
+          "description": "commas and punctuation"
+        },
+        {
+          "index": 515,
+          "activation": 289.39019775390625,
+          "description": "encryption and passwords"
+        },
+        {
+          "index": 530,
+          "activation": 582.4222412109375,
+          "description": "complex, serious, or correct information"
+        },
+        {
+          "index": 643,
+          "activation": 2421.84814453125,
+          "description": "alternatives or choices"
+        },
+        {
+          "index": 659,
+          "activation": 290.98828125,
+          "description": "physical strength and body"
+        },
+        {
+          "index": 722,
+          "activation": 321.98309326171875,
+          "description": "theoretical physics concepts"
+        },
+        {
+          "index": 965,
+          "activation": 205.1554412841797,
+          "description": "TypeScript Angular imports"
+        },
+        {
+          "index": 971,
+          "activation": 810.6767578125,
+          "description": null
+        },
+        {
+          "index": 993,
+          "activation": 335.4063720703125,
+          "description": "created by, executed only"
+        },
+        {
+          "index": 1123,
+          "activation": 937.8729248046875,
+          "description": "code and programming concepts"
+        },
+        {
+          "index": 1223,
+          "activation": 777.420166015625,
+          "description": null
+        },
+        {
+          "index": 1306,
+          "activation": 639.9189453125,
+          "description": "say goodbye"
+        },
+        {
+          "index": 1520,
+          "activation": 637.4656982421875,
+          "description": null
+        },
+        {
+          "index": 1699,
+          "activation": 1199.669921875,
+          "description": null
+        },
+        {
+          "index": 1724,
+          "activation": 352.2588806152344,
+          "description": "consistent environments"
+        },
+        {
+          "index": 1803,
+          "activation": 192.83370971679688,
+          "description": null
+        },
+        {
+          "index": 1837,
+          "activation": 1183.10205078125,
+          "description": null
+        },
+        {
+          "index": 1854,
+          "activation": 534.5673217773438,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1889,
+          "activation": 719.306396484375,
+          "description": "multilingual non-English words"
+        },
+        {
+          "index": 1895,
+          "activation": 336.38031005859375,
+          "description": null
+        },
+        {
+          "index": 1916,
+          "activation": 353.85272216796875,
+          "description": "ctk radiobutton Rock"
+        },
+        {
+          "index": 1954,
+          "activation": 1194.125,
+          "description": "negations and contrasts"
+        },
+        {
+          "index": 1981,
+          "activation": 1071.96630859375,
+          "description": null
+        },
+        {
+          "index": 2007,
+          "activation": 296.7490234375,
+          "description": null
+        },
+        {
+          "index": 2181,
+          "activation": 412.093017578125,
+          "description": "pump and dump, drag and drop, thick and thin"
+        },
+        {
+          "index": 2290,
+          "activation": 362.005126953125,
+          "description": "various types of information"
+        },
+        {
+          "index": 2454,
+          "activation": 560.351318359375,
+          "description": null
+        },
+        {
+          "index": 2549,
+          "activation": 288.30450439453125,
+          "description": null
+        },
+        {
+          "index": 2886,
+          "activation": 433.63702392578125,
+          "description": "power dynamics"
+        },
+        {
+          "index": 2968,
+          "activation": 572.98388671875,
+          "description": "potentially real-time"
+        },
+        {
+          "index": 2999,
+          "activation": 367.4318542480469,
+          "description": "providing referrals"
+        },
+        {
+          "index": 3114,
+          "activation": 355.86993408203125,
+          "description": "convection, coniferous"
+        },
+        {
+          "index": 3190,
+          "activation": 336.70135498046875,
+          "description": "ingrained phenomenon"
+        },
+        {
+          "index": 3329,
+          "activation": 421.1842041015625,
+          "description": "deal with, interact with"
+        },
+        {
+          "index": 3550,
+          "activation": 385.4653015136719,
+          "description": "i don't"
+        },
+        {
+          "index": 3581,
+          "activation": 283.59490966796875,
+          "description": "method or technique"
+        },
+        {
+          "index": 3883,
+          "activation": 712.86767578125,
+          "description": "forces and power"
+        },
+        {
+          "index": 3897,
+          "activation": 320.4793701171875,
+          "description": "words before light"
+        },
+        {
+          "index": 4181,
+          "activation": 541.6099853515625,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4874,
+          "activation": 305.52447509765625,
+          "description": "possessive its"
+        },
+        {
+          "index": 5094,
+          "activation": 326.4528503417969,
+          "description": "option .org"
+        },
+        {
+          "index": 5284,
+          "activation": 716.4395141601562,
+          "description": "N words and abbreviations"
+        },
+        {
+          "index": 6524,
+          "activation": 435.0316467285156,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 7128,
+          "activation": 356.3204345703125,
+          "description": "but with, but within"
+        },
+        {
+          "index": 7188,
+          "activation": 567.3717651367188,
+          "description": "originating from"
+        },
+        {
+          "index": 9415,
+          "activation": 360.4811096191406,
+          "description": "new creations"
+        },
+        {
+          "index": 10077,
+          "activation": 338.6269226074219,
+          "description": "asking for context"
+        },
+        {
+          "index": 10102,
+          "activation": 303.6358947753906,
+          "description": "circle and radius"
+        },
+        {
+          "index": 10333,
+          "activation": 298.01800537109375,
+          "description": "positive reinforcement and appreciation"
+        },
+        {
+          "index": 12281,
+          "activation": 386.0709228515625,
+          "description": "guide explanations best practices"
+        },
+        {
+          "index": 13138,
+          "activation": 337.3548278808594,
+          "description": "numbers and measurements"
+        },
+        {
+          "index": 15781,
+          "activation": 589.60888671875,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 19908,
+          "activation": 719.364501953125,
+          "description": "ongoing uncertainty or debate"
+        },
+        {
+          "index": 20813,
+          "activation": 260.76129150390625,
+          "description": "documentation and forms"
+        },
+        {
+          "index": 21489,
+          "activation": 394.5848388671875,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 25104,
+          "activation": 416.05999755859375,
+          "description": "a function"
+        },
+        {
+          "index": 26752,
+          "activation": 843.5548095703125,
+          "description": "back testing and backstories"
+        },
+        {
+          "index": 26771,
+          "activation": 322.89093017578125,
+          "description": "would like to"
+        },
+        {
+          "index": 27566,
+          "activation": 491.593017578125,
+          "description": "commands, file operations"
+        },
+        {
+          "index": 34365,
+          "activation": 255.03936767578125,
+          "description": "breakdown of analyzed information"
+        },
+        {
+          "index": 38416,
+          "activation": 826.6615600585938,
+          "description": "unburnt, rarer, portion, brighter"
+        },
+        {
+          "index": 38434,
+          "activation": 340.06695556640625,
+          "description": "complex and imaginary numbers"
+        },
+        {
+          "index": 38871,
+          "activation": 321.4519958496094,
+          "description": "for missing victims"
+        },
+        {
+          "index": 43299,
+          "activation": 751.888427734375,
+          "description": "list iteration or directory traversal"
+        },
+        {
+          "index": 49849,
+          "activation": 399.7392578125,
+          "description": "check-ins, compact varieties, slowly rotating"
+        },
+        {
+          "index": 50465,
+          "activation": 338.06109619140625,
+          "description": "thermodynamics laws and entropy"
+        },
+        {
+          "index": 50568,
+          "activation": 469.120361328125,
+          "description": "database operations"
+        },
+        {
+          "index": 53137,
+          "activation": 430.8146057128906,
+          "description": "efficiency and effectiveness"
+        },
+        {
+          "index": 59244,
+          "activation": 1082.11181640625,
+          "description": "if __name__ == '__main__': block"
+        },
+        {
+          "index": 61565,
+          "activation": 901.0152587890625,
+          "description": "National Institutes of Health"
+        }
+      ]
+    },
+    {
+      "position": 12,
+      "token_id": 653,
+      "token": "␠or",
+      "l0": 60,
+      "active_features": [
+        {
+          "index": 35,
+          "activation": 926.7263793945312,
+          "description": "destroy, disrupt, undermine"
+        },
+        {
+          "index": 76,
+          "activation": 812.525390625,
+          "description": "origin and creation"
+        },
+        {
+          "index": 274,
+          "activation": 655.873779296875,
+          "description": "immediate help and health concerns"
+        },
+        {
+          "index": 309,
+          "activation": 628.7677612304688,
+          "description": "reefs act"
+        },
+        {
+          "index": 530,
+          "activation": 1153.5985107421875,
+          "description": "complex, serious, or correct information"
+        },
+        {
+          "index": 792,
+          "activation": 430.5067443847656,
+          "description": "as a classification"
+        },
+        {
+          "index": 815,
+          "activation": 273.9695739746094,
+          "description": "Estimado greeting"
+        },
+        {
+          "index": 844,
+          "activation": 246.50341796875,
+          "description": "new discoveries in space"
+        },
+        {
+          "index": 958,
+          "activation": 289.31695556640625,
+          "description": null
+        },
+        {
+          "index": 1083,
+          "activation": 848.0974731445312,
+          "description": "or presenting alternatives"
+        },
+        {
+          "index": 1138,
+          "activation": 2570.2412109375,
+          "description": "state or outcome"
+        },
+        {
+          "index": 1223,
+          "activation": 628.15625,
+          "description": null
+        },
+        {
+          "index": 1306,
+          "activation": 1343.8502197265625,
+          "description": "say goodbye"
+        },
+        {
+          "index": 1520,
+          "activation": 544.4425048828125,
+          "description": null
+        },
+        {
+          "index": 1803,
+          "activation": 224.61572265625,
+          "description": null
+        },
+        {
+          "index": 1889,
+          "activation": 313.86285400390625,
+          "description": "multilingual non-English words"
+        },
+        {
+          "index": 1940,
+          "activation": 471.34588623046875,
+          "description": null
+        },
+        {
+          "index": 1967,
+          "activation": 270.5061950683594,
+          "description": "role playing"
+        },
+        {
+          "index": 1981,
+          "activation": 760.3259887695312,
+          "description": null
+        },
+        {
+          "index": 2137,
+          "activation": 274.46484375,
+          "description": "professions and skilled roles"
+        },
+        {
+          "index": 2181,
+          "activation": 1146.0157470703125,
+          "description": "pump and dump, drag and drop, thick and thin"
+        },
+        {
+          "index": 2290,
+          "activation": 393.04241943359375,
+          "description": "various types of information"
+        },
+        {
+          "index": 2315,
+          "activation": 778.1898803710938,
+          "description": "remove or prune branches"
+        },
+        {
+          "index": 2321,
+          "activation": 487.2674560546875,
+          "description": "less light"
+        },
+        {
+          "index": 2542,
+          "activation": 200.4958038330078,
+          "description": "me with"
+        },
+        {
+          "index": 2549,
+          "activation": 217.94818115234375,
+          "description": null
+        },
+        {
+          "index": 2622,
+          "activation": 420.7895202636719,
+          "description": "modal verbs to be"
+        },
+        {
+          "index": 3189,
+          "activation": 538.9221801757812,
+          "description": "is widely considered or required"
+        },
+        {
+          "index": 3455,
+          "activation": 316.22296142578125,
+          "description": "are incorrect descriptors"
+        },
+        {
+          "index": 3556,
+          "activation": 541.3359985351562,
+          "description": null
+        },
+        {
+          "index": 3780,
+          "activation": 321.5473937988281,
+          "description": "defining characteristics"
+        },
+        {
+          "index": 3883,
+          "activation": 373.0628662109375,
+          "description": "forces and power"
+        },
+        {
+          "index": 4169,
+          "activation": 421.9784851074219,
+          "description": "pull request"
+        },
+        {
+          "index": 4181,
+          "activation": 629.6964111328125,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4374,
+          "activation": 481.30633544921875,
+          "description": "cannot lead, cannot change"
+        },
+        {
+          "index": 5242,
+          "activation": 315.2012939453125,
+          "description": "energy and resource consumption"
+        },
+        {
+          "index": 5637,
+          "activation": 481.33978271484375,
+          "description": "pros and cons"
+        },
+        {
+          "index": 6524,
+          "activation": 331.7679748535156,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 7508,
+          "activation": 483.98138427734375,
+          "description": "digital painting, estimated steps"
+        },
+        {
+          "index": 9226,
+          "activation": 317.3057861328125,
+          "description": "describing qualities and associations"
+        },
+        {
+          "index": 9576,
+          "activation": 405.390625,
+          "description": "production and sale of goods"
+        },
+        {
+          "index": 9618,
+          "activation": 712.0052490234375,
+          "description": "negation followed by nuance"
+        },
+        {
+          "index": 10333,
+          "activation": 531.7241821289062,
+          "description": "positive reinforcement and appreciation"
+        },
+        {
+          "index": 10680,
+          "activation": 373.70819091796875,
+          "description": "seasoning food and ingredients"
+        },
+        {
+          "index": 11052,
+          "activation": 458.5890808105469,
+          "description": "D, DI, or sequences ending in D"
+        },
+        {
+          "index": 13259,
+          "activation": 313.7362365722656,
+          "description": "agreement, acknowledgment, or shared belief"
+        },
+        {
+          "index": 13739,
+          "activation": 713.8140258789062,
+          "description": "analyze and deploy actions"
+        },
+        {
+          "index": 14128,
+          "activation": 229.666748046875,
+          "description": "isms and -ists"
+        },
+        {
+          "index": 14350,
+          "activation": 286.5434875488281,
+          "description": "lowering or decreasing values"
+        },
+        {
+          "index": 15781,
+          "activation": 325.61968994140625,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 17124,
+          "activation": 549.43017578125,
+          "description": "best fits"
+        },
+        {
+          "index": 28238,
+          "activation": 396.0702819824219,
+          "description": "tumor shrinkage"
+        },
+        {
+          "index": 29770,
+          "activation": 411.52874755859375,
+          "description": "other hand"
+        },
+        {
+          "index": 32407,
+          "activation": 662.0742797851562,
+          "description": "reducing or absorbing"
+        },
+        {
+          "index": 39571,
+          "activation": 311.615966796875,
+          "description": "clarity: followed by numbered list"
+        },
+        {
+          "index": 50568,
+          "activation": 708.7125244140625,
+          "description": "database operations"
+        },
+        {
+          "index": 51569,
+          "activation": 407.9259033203125,
+          "description": "creating and generating ideas"
+        },
+        {
+          "index": 52013,
+          "activation": 299.2815246582031,
+          "description": "profoundly unethical and baseless"
+        },
+        {
+          "index": 57334,
+          "activation": 791.4493408203125,
+          "description": "should get or become"
+        },
+        {
+          "index": 60621,
+          "activation": 551.0901489257812,
+          "description": "negative or neutral sentiment"
+        }
+      ]
+    },
+    {
+      "position": 13,
+      "token_id": 18396,
+      "token": "␠destroyed",
+      "l0": 50,
+      "active_features": [
+        {
+          "index": 119,
+          "activation": 1753.8914794921875,
+          "description": "comma but"
+        },
+        {
+          "index": 274,
+          "activation": 521.6419677734375,
+          "description": "immediate help and health concerns"
+        },
+        {
+          "index": 341,
+          "activation": 1103.966552734375,
+          "description": "commas and punctuation"
+        },
+        {
+          "index": 358,
+          "activation": 691.3175659179688,
+          "description": null
+        },
+        {
+          "index": 608,
+          "activation": 382.6396484375,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 722,
+          "activation": 456.71453857421875,
+          "description": "theoretical physics concepts"
+        },
+        {
+          "index": 745,
+          "activation": 579.486083984375,
+          "description": "code statements ending with semicolon"
+        },
+        {
+          "index": 993,
+          "activation": 292.9305419921875,
+          "description": "created by, executed only"
+        },
+        {
+          "index": 1223,
+          "activation": 549.06298828125,
+          "description": null
+        },
+        {
+          "index": 1520,
+          "activation": 670.4195556640625,
+          "description": null
+        },
+        {
+          "index": 1580,
+          "activation": 258.91778564453125,
+          "description": "explains and describes concepts"
+        },
+        {
+          "index": 1665,
+          "activation": 271.8114318847656,
+          "description": null
+        },
+        {
+          "index": 1731,
+          "activation": 285.3758544921875,
+          "description": "sorted alphabetically"
+        },
+        {
+          "index": 1803,
+          "activation": 939.8248291015625,
+          "description": null
+        },
+        {
+          "index": 1837,
+          "activation": 625.33447265625,
+          "description": null
+        },
+        {
+          "index": 1854,
+          "activation": 933.7560424804688,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1954,
+          "activation": 972.1311645507812,
+          "description": "negations and contrasts"
+        },
+        {
+          "index": 1981,
+          "activation": 649.8589477539062,
+          "description": null
+        },
+        {
+          "index": 2000,
+          "activation": 298.316162109375,
+          "description": null
+        },
+        {
+          "index": 2023,
+          "activation": 867.69140625,
+          "description": null
+        },
+        {
+          "index": 2290,
+          "activation": 287.26007080078125,
+          "description": "various types of information"
+        },
+        {
+          "index": 2321,
+          "activation": 414.67059326171875,
+          "description": "less light"
+        },
+        {
+          "index": 2454,
+          "activation": 427.02880859375,
+          "description": null
+        },
+        {
+          "index": 2918,
+          "activation": 368.9763488769531,
+          "description": "definitions after code or math"
+        },
+        {
+          "index": 2999,
+          "activation": 920.3082275390625,
+          "description": "providing referrals"
+        },
+        {
+          "index": 3287,
+          "activation": 205.2355194091797,
+          "description": "energy followed by parentheses"
+        },
+        {
+          "index": 3419,
+          "activation": 583.037109375,
+          "description": "only"
+        },
+        {
+          "index": 3423,
+          "activation": 227.51583862304688,
+          "description": "not when"
+        },
+        {
+          "index": 3883,
+          "activation": 523.1275634765625,
+          "description": "forces and power"
+        },
+        {
+          "index": 3971,
+          "activation": 311.80120849609375,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4181,
+          "activation": 714.2261962890625,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4217,
+          "activation": 568.8568115234375,
+          "description": "in languages"
+        },
+        {
+          "index": 4236,
+          "activation": 380.81903076171875,
+          "description": "temperature, degrees, heat, thermostat"
+        },
+        {
+          "index": 5766,
+          "activation": 581.8796997070312,
+          "description": "entirely or completely"
+        },
+        {
+          "index": 6524,
+          "activation": 1130.7156982421875,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 6620,
+          "activation": 406.99456787109375,
+          "description": "factors influencing choices"
+        },
+        {
+          "index": 7128,
+          "activation": 907.4251098632812,
+          "description": "but with, but within"
+        },
+        {
+          "index": 8415,
+          "activation": 257.6252746582031,
+          "description": "relationship or difference between"
+        },
+        {
+          "index": 9415,
+          "activation": 235.28347778320312,
+          "description": "new creations"
+        },
+        {
+          "index": 10333,
+          "activation": 433.8411865234375,
+          "description": "positive reinforcement and appreciation"
+        },
+        {
+          "index": 11450,
+          "activation": 372.5325927734375,
+          "description": "standard library output"
+        },
+        {
+          "index": 13862,
+          "activation": 451.6844482421875,
+          "description": "state or condition phrases"
+        },
+        {
+          "index": 15781,
+          "activation": 597.504638671875,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 16387,
+          "activation": 283.8831787109375,
+          "description": "value and type"
+        },
+        {
+          "index": 21489,
+          "activation": 533.406005859375,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 42698,
+          "activation": 422.11480712890625,
+          "description": "debated topics and uncertainty"
+        },
+        {
+          "index": 44364,
+          "activation": 413.1910095214844,
+          "description": "per oriented"
+        },
+        {
+          "index": 48893,
+          "activation": 240.81204223632812,
+          "description": "main__\":"
+        },
+        {
+          "index": 49928,
+          "activation": 391.289306640625,
+          "description": "you see or understand"
+        },
+        {
+          "index": 50465,
+          "activation": 687.1323852539062,
+          "description": "thermodynamics laws and entropy"
+        }
+      ]
+    },
+    {
+      "position": 14,
+      "token_id": 236761,
+      "token": ".",
+      "l0": 64,
+      "active_features": [
+        {
+          "index": 119,
+          "activation": 1150.49365234375,
+          "description": "comma but"
+        },
+        {
+          "index": 461,
+          "activation": 326.3377990722656,
+          "description": null
+        },
+        {
+          "index": 608,
+          "activation": 431.91436767578125,
+          "description": "transfer/transmission on communication"
+        },
+        {
+          "index": 677,
+          "activation": 701.3568115234375,
+          "description": "mathematical calculations and equations"
+        },
+        {
+          "index": 722,
+          "activation": 293.76312255859375,
+          "description": "theoretical physics concepts"
+        },
+        {
+          "index": 786,
+          "activation": 337.864990234375,
+          "description": "mathematics"
+        },
+        {
+          "index": 914,
+          "activation": 673.3851318359375,
+          "description": null
+        },
+        {
+          "index": 936,
+          "activation": 207.513427734375,
+          "description": "select answer or conclusion"
+        },
+        {
+          "index": 1038,
+          "activation": 496.90093994140625,
+          "description": "code explanation or notes"
+        },
+        {
+          "index": 1128,
+          "activation": 379.7401123046875,
+          "description": "Before You Start"
+        },
+        {
+          "index": 1131,
+          "activation": 191.11141967773438,
+          "description": "numbers and punctuation"
+        },
+        {
+          "index": 1174,
+          "activation": 257.21942138671875,
+          "description": "depending on"
+        },
+        {
+          "index": 1305,
+          "activation": 207.78408813476562,
+          "description": "final answer"
+        },
+        {
+          "index": 1422,
+          "activation": 666.57763671875,
+          "description": "explain or describe context"
+        },
+        {
+          "index": 1520,
+          "activation": 1125.87451171875,
+          "description": null
+        },
+        {
+          "index": 1584,
+          "activation": 254.90960693359375,
+          "description": "electrical power circuits"
+        },
+        {
+          "index": 1604,
+          "activation": 2539.9716796875,
+          "description": "transition words"
+        },
+        {
+          "index": 1643,
+          "activation": 410.0641784667969,
+          "description": "that"
+        },
+        {
+          "index": 1717,
+          "activation": 265.8140869140625,
+          "description": null
+        },
+        {
+          "index": 1718,
+          "activation": 288.25958251953125,
+          "description": null
+        },
+        {
+          "index": 1803,
+          "activation": 779.21875,
+          "description": null
+        },
+        {
+          "index": 1826,
+          "activation": 641.8065185546875,
+          "description": null
+        },
+        {
+          "index": 1854,
+          "activation": 1603.00341796875,
+          "description": "Light, circumference, velocity, Pi"
+        },
+        {
+          "index": 1884,
+          "activation": 275.2701416015625,
+          "description": "english wikipedia links"
+        },
+        {
+          "index": 1981,
+          "activation": 664.7719116210938,
+          "description": null
+        },
+        {
+          "index": 2025,
+          "activation": 275.7020263671875,
+          "description": "html code <!DOCTYPE html>"
+        },
+        {
+          "index": 2228,
+          "activation": 472.7808837890625,
+          "description": "electricity generation"
+        },
+        {
+          "index": 2316,
+          "activation": 262.0045166015625,
+          "description": null
+        },
+        {
+          "index": 2321,
+          "activation": 819.5216064453125,
+          "description": "less light"
+        },
+        {
+          "index": 2358,
+          "activation": 585.7536010742188,
+          "description": "atoms"
+        },
+        {
+          "index": 2410,
+          "activation": 1099.8759765625,
+          "description": null
+        },
+        {
+          "index": 2527,
+          "activation": 249.36285400390625,
+          "description": "particle physics"
+        },
+        {
+          "index": 2706,
+          "activation": 524.1229248046875,
+          "description": "what questions seeking explanation"
+        },
+        {
+          "index": 2708,
+          "activation": 291.3709716796875,
+          "description": "introductions and explanations"
+        },
+        {
+          "index": 3419,
+          "activation": 219.43478393554688,
+          "description": "only"
+        },
+        {
+          "index": 3883,
+          "activation": 589.1397094726562,
+          "description": "forces and power"
+        },
+        {
+          "index": 3971,
+          "activation": 455.4573974609375,
+          "description": "laws and principles"
+        },
+        {
+          "index": 4181,
+          "activation": 406.0802917480469,
+          "description": "data points clustered closely together"
+        },
+        {
+          "index": 4236,
+          "activation": 534.2569580078125,
+          "description": "temperature, degrees, heat, thermostat"
+        },
+        {
+          "index": 4378,
+          "activation": 511.3064270019531,
+          "description": "neural networks, lean forward"
+        },
+        {
+          "index": 5182,
+          "activation": 264.6119384765625,
+          "description": "decimal and binary representation"
+        },
+        {
+          "index": 5952,
+          "activation": 635.70703125,
+          "description": "instead or rather"
+        },
+        {
+          "index": 5958,
+          "activation": 367.52783203125,
+          "description": "code blocks and data structures"
+        },
+        {
+          "index": 5973,
+          "activation": 427.8711853027344,
+          "description": "so; if so"
+        },
+        {
+          "index": 6290,
+          "activation": 590.802001953125,
+          "description": "function descriptions"
+        },
+        {
+          "index": 6524,
+          "activation": 1336.3458251953125,
+          "description": "entropy, disorder, free energy, thermal"
+        },
+        {
+          "index": 6578,
+          "activation": 616.2886962890625,
+          "description": "once you provide"
+        },
+        {
+          "index": 7226,
+          "activation": 303.5396728515625,
+          "description": "scientific experiments"
+        },
+        {
+          "index": 9764,
+          "activation": 265.749267578125,
+          "description": "false positives and negatives"
+        },
+        {
+          "index": 10748,
+          "activation": 321.821044921875,
+          "description": "change this / replace this / eliminate this"
+        },
+        {
+          "index": 15781,
+          "activation": 682.4745483398438,
+          "description": "energy conversion: mechanical, chemical, kinetic"
+        },
+        {
+          "index": 15936,
+          "activation": 289.391845703125,
+          "description": "Okay,"
+        },
+        {
+          "index": 17290,
+          "activation": 407.66864013671875,
+          "description": "special characters followed by a letter"
+        },
+        {
+          "index": 21489,
+          "activation": 829.3477783203125,
+          "description": "motion and physics concepts"
+        },
+        {
+          "index": 25984,
+          "activation": 475.8118896484375,
+          "description": "Emphasizes"
+        },
+        {
+          "index": 28429,
+          "activation": 141.976318359375,
+          "description": "ontology, conceive, postulate"
+        },
+        {
+          "index": 40249,
+          "activation": 526.8679809570312,
+          "description": "Materials Science"
+        },
+        {
+          "index": 43003,
+          "activation": 122.61669921875,
+          "description": "initial states or characteristics"
+        },
+        {
+          "index": 45100,
+          "activation": 382.2286071777344,
+          "description": "structured data analysis"
+        },
+        {
+          "index": 50230,
+          "activation": 261.41204833984375,
+          "description": "energy and foreign language variations"
+        },
+        {
+          "index": 53137,
+          "activation": 295.7601623535156,
+          "description": "efficiency and effectiveness"
+        },
+        {
+          "index": 54891,
+          "activation": 665.9774169921875,
+          "description": "instead or in contrast"
+        },
+        {
+          "index": 60714,
+          "activation": 468.06640625,
+          "description": "sql create table"
+        },
+        {
+          "index": 62464,
+          "activation": 728.6630859375,
+          "description": "mathematical definitions and proofs"
+        }
+      ]
+    }
+  ],
+  "created_at_utc": "2026-03-16T13:56:46.274024Z"
+}
