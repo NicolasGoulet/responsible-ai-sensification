@@ -196,7 +196,8 @@ def inspect_live(
         hook.remove()
 
         # residual at the last (newly appended) position: shape (d_model,)
-        residual_last = captured[0][0, -1, :]  # (d_model,)
+        hidden = captured[0]
+        residual_last = hidden.squeeze(0)[-1, :]  # (d_model,)
 
         # Next token: greedy argmax
         next_token_id = int(outputs.logits[0, -1].argmax().item())
@@ -263,6 +264,9 @@ def explain_feature(feature: ActiveFeature) -> str:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    from pathlib import Path
+    from export import export_to_json
+
     MODEL_ID = "google/gemma-3-1b-pt"
     LAYER = 22
     WIDTH = "65k"
@@ -291,3 +295,7 @@ if __name__ == "__main__":
             print(f"           {explain_feature(feat)}")
         if len(tok.active_features) > 3:
             print(f"           ... and {len(tok.active_features) - 3} more features")
+
+    output_json = Path("runs") / "analysis.json"
+    export_to_json(result, output_json)
+    print(f"\nExported analysis to {output_json}")
