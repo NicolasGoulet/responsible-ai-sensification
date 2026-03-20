@@ -1,15 +1,17 @@
-import json
 import gzip
+import json
 import re
-import requests
 from pathlib import Path
 
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from huggingface_hub import hf_hub_download
-from safetensors.torch import load_file
-from pydantic import BaseModel
+import requests
 import torch
 import torch.nn as nn
+from huggingface_hub import hf_hub_download
+from pydantic import BaseModel
+from safetensors.torch import load_file
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+from export import export_to_json
 
 torch.set_grad_enabled(False)
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -18,6 +20,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 # ---------------------------------------------------------------------------
 # Pydantic models
 # ---------------------------------------------------------------------------
+
 
 class ActiveFeature(BaseModel):
     index: int
@@ -28,7 +31,7 @@ class ActiveFeature(BaseModel):
 class TokenAnalysis(BaseModel):
     token_id: int
     token: str
-    l0: int                          # total number of active features (activation > 0)
+    l0: int  # total number of active features (activation > 0)
     active_features: list[ActiveFeature]
 
 
@@ -36,16 +39,16 @@ class GenerationAnalysis(BaseModel):
     prompt: str
     model_id: str
     layer: int
-    sae_width: str                   # e.g. "65k"
+    sae_width: str  # e.g. "65k"
     generated_tokens: list[TokenAnalysis]
-    full_generated_text: str         # decoded full generation (all tokens joined)
+    full_generated_text: str  # decoded full generation (all tokens joined)
 
 
 class NeuronpediaScope(BaseModel):
     model_id: str
     layer: int
-    width: str                       # e.g. "65k"
-    explanations: dict[int, str]     # feature_index -> description string
+    width: str  # e.g. "65k"
+    explanations: dict[int, str]  # feature_index -> description string
 
 
 # ---------------------------------------------------------------------------
@@ -61,10 +64,7 @@ def list_available_scopes(model_id: str) -> list[str]:
 
     Example return value: ['7-gemmascope-2-res-16k', '22-gemmascope-2-res-65k', ...]
     """
-    url = (
-        f"{NEURONPEDIA_S3}/?list-type=2"
-        f"&prefix=v1/{model_id}/&delimiter=/"
-    )
+    url = f"{NEURONPEDIA_S3}/?list-type=2&prefix=v1/{model_id}/&delimiter=/"
     resp = requests.get(url)
     resp.raise_for_status()
     prefixes = re.findall(r"<Prefix>v1/[^/]+/([^/]+)/</Prefix>", resp.text)
@@ -92,22 +92,26 @@ def download_neuronpedia_explanations(
                 entry = json.loads(line)
                 explanations[entry["index"]] = entry["description"]
         return NeuronpediaScope(
-            model_id=model_id, layer=layer, width=width,
+            model_id=model_id,
+            layer=layer,
+            width=width,
             explanations=explanations,
         )
 
     # Discover batch count
     scope_id = f"{layer}-gemmascope-2-res-{width}"
     prefix = f"v1/{model_id}/{scope_id}/explanations/"
-    list_url = (
-        f"{NEURONPEDIA_S3}/?list-type=2&prefix={prefix}&delimiter=/"
-    )
+    list_url = f"{NEURONPEDIA_S3}/?list-type=2&prefix={prefix}&delimiter=/"
     resp = requests.get(list_url)
     resp.raise_for_status()
-    batch_keys = re.findall(r"<Key>(" + re.escape(prefix) + r"batch-\d+\.jsonl\.gz)</Key>", resp.text)
+    batch_keys = re.findall(
+        r"<Key>(" + re.escape(prefix) + r"batch-\d+\.jsonl\.gz)</Key>", resp.text
+    )
 
     with open(cache_file, "w") as out:
-        for key in sorted(batch_keys, key=lambda k: int(k.split("batch-")[1].split(".")[0])):
+        for key in sorted(
+            batch_keys, key=lambda k: int(k.split("batch-")[1].split(".")[0])
+        ):
             url = f"{NEURONPEDIA_S3}/{key}"
             data = requests.get(url).content
             for line in gzip.decompress(data).decode().splitlines():
@@ -118,7 +122,9 @@ def download_neuronpedia_explanations(
                 out.write(json.dumps({"index": idx, "description": desc}) + "\n")
 
     return NeuronpediaScope(
-        model_id=model_id, layer=layer, width=width,
+        model_id=model_id,
+        layer=layer,
+        width=width,
         explanations=explanations,
     )
 
@@ -126,6 +132,7 @@ def download_neuronpedia_explanations(
 # ---------------------------------------------------------------------------
 # SAE
 # ---------------------------------------------------------------------------
+
 
 class JumpReluSAE(nn.Module):
     def __init__(self, w_enc, b_enc, threshold, w_dec, b_dec):
@@ -143,7 +150,9 @@ class JumpReluSAE(nn.Module):
         return acts
 
 
-def load_sae(layer=22, width="65k", l0="medium", category="resid_post", device=device) -> JumpReluSAE:
+def load_sae(
+    layer=22, width="65k", l0="medium", category="resid_post", device=device
+) -> JumpReluSAE:
     path = f"{category}/layer_{layer}_width_{width}_l0_{l0}/params.safetensors"
     local_path = hf_hub_download(repo_id="google/gemma-scope-2-1b-pt", filename=path)
     tensors = load_file(local_path)
@@ -160,6 +169,7 @@ def load_sae(layer=22, width="65k", l0="medium", category="resid_post", device=d
 # ---------------------------------------------------------------------------
 # Generation-time inspection
 # ---------------------------------------------------------------------------
+
 
 def inspect_live(
     prompt: str,
@@ -218,12 +228,14 @@ def inspect_live(
         ]
 
         token_str = tokenizer.decode([next_token_id])
-        token_analyses.append(TokenAnalysis(
-            token_id=next_token_id,
-            token=token_str,
-            l0=l0,
-            active_features=active_features,
-        ))
+        token_analyses.append(
+            TokenAnalysis(
+                token_id=next_token_id,
+                token=token_str,
+                l0=l0,
+                active_features=active_features,
+            )
+        )
 
         # Stop at EOS
         if next_token_id == tokenizer.eos_token_id:
@@ -264,9 +276,6 @@ def explain_feature(feature: ActiveFeature) -> str:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    from pathlib import Path
-    from export import export_to_json
-
     MODEL_ID = "google/gemma-3-1b-pt"
     LAYER = 22
     WIDTH = "65k"
@@ -291,7 +300,7 @@ if __name__ == "__main__":
     print(f"Generated text: {result.full_generated_text!r}\n")
     for step, tok in enumerate(result.generated_tokens, start=1):
         print(f"Step {step:>3} | token={tok.token!r:<15} | L0={tok.l0}")
-        for feat in tok.active_features[:3]:   # print first 3 active features as sample
+        for feat in tok.active_features[:3]:  # print first 3 active features as sample
             print(f"           {explain_feature(feat)}")
         if len(tok.active_features) > 3:
             print(f"           ... and {len(tok.active_features) - 3} more features")

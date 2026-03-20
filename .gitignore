@@ -209,7 +209,9 @@ __marimo__/
 .claude
 Tutorial_Gemma_Scope_2*
 
-# GPT trash stuff
-neuronpedia_cache/
 audio/
 runs/
+
+# GPT trash stuff
+neuronpedia_cache/
+specs/
