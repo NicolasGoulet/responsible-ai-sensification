@@ -45,7 +45,7 @@ def generate_token_audio(active_features: list[dict]) -> np.ndarray:
     return buffer
 
 
-def synthesize(input_path: Path, output_dir: Path) -> Path:
+def synthesize_additive(input_path: Path, output_dir: Path) -> Path:
     with open(input_path) as f:
         data = json.load(f)
 
@@ -73,12 +73,23 @@ def synthesize(input_path: Path, output_dir: Path) -> Path:
     return output_path
 
 
+METHODS = {
+    "additive": synthesize_additive,
+}
+
+
 def main():
     parser = argparse.ArgumentParser(description="Synthesize SAE feature audio from JSON")
     parser.add_argument("input", type=Path, help="Input JSON file")
     parser.add_argument("--output-dir", type=Path, default=Path("audio"), help="Output directory")
+    parser.add_argument(
+        "--method",
+        default="additive",
+        choices=list(METHODS.keys()),
+        help="Synthesis method (default: additive)",
+    )
     args = parser.parse_args()
-    synthesize(args.input, args.output_dir)
+    METHODS[args.method](args.input, args.output_dir)
 
 
 if __name__ == "__main__":

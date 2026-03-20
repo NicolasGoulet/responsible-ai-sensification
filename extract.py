@@ -1,3 +1,10 @@
+"""extract.py: Extract SAE feature activations from a language model generation.
+
+Usage:
+    uv run python extract.py "your prompt" [--model MODEL] [--layer LAYER]
+        [--width WIDTH] [--l0 L0] [--max-tokens N] [--output PATH] [--verbose]
+"""
+import argparse
 import gzip
 import json
 import re
@@ -60,10 +67,7 @@ CACHE_DIR = Path("neuronpedia_cache")
 
 
 def list_available_scopes(model_id: str) -> list[str]:
-    """Return list of scope IDs available on Neuronpedia for model_id.
-
-    Example return value: ['7-gemmascope-2-res-16k', '22-gemmascope-2-res-65k', ...]
-    """
+    """Return list of scope IDs available on Neuronpedia for model_id."""
     url = f"{NEURONPEDIA_S3}/?list-type=2&prefix=v1/{model_id}/&delimiter=/"
     resp = requests.get(url)
     resp.raise_for_status()
@@ -178,24 +182,16 @@ def inspect_live(
     sae: JumpReluSAE,
     layer: int,
     neuronpedia: NeuronpediaScope,
+    model_id: str,
     max_new_tokens: int = 200,
 ) -> GenerationAnalysis:
-    """Generate tokens autoregressively and capture SAE feature activations at each step.
-
-    For each generated token (excluding the prompt), records:
-    - The token string and id
-    - All active SAE features (activation > 0) with their Neuronpedia description
-    - L0: total number of active features for that token position
-
-    Stops at EOS or when max_new_tokens is reached.
-    """
+    """Generate tokens autoregressively and capture SAE feature activations at each step."""
     inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
     input_ids = inputs["input_ids"].to(device)
 
     token_analyses: list[TokenAnalysis] = []
 
     for _ in range(max_new_tokens):
-        # Capture residual stream at the last token position via a one-shot hook
         captured: list[torch.Tensor] = []
 
         def hook_fn(_module, _input, output):
@@ -205,17 +201,13 @@ def inspect_live(
         outputs = model(input_ids)
         hook.remove()
 
-        # residual at the last (newly appended) position: shape (d_model,)
         hidden = captured[0]
         residual_last = hidden.squeeze(0)[-1, :]  # (d_model,)
 
-        # Next token: greedy argmax
         next_token_id = int(outputs.logits[0, -1].argmax().item())
 
-        # SAE encode: shape (d_sae,)
         sae_acts = sae.encode(residual_last.float().unsqueeze(0)).squeeze(0)
 
-        # All active features
         active_indices = (sae_acts > 0).nonzero(as_tuple=True)[0].tolist()
         l0 = len(active_indices)
         active_features = [
@@ -237,7 +229,6 @@ def inspect_live(
             )
         )
 
-        # Stop at EOS
         if next_token_id == tokenizer.eos_token_id:
             break
 
@@ -253,21 +244,11 @@ def inspect_live(
 
     return GenerationAnalysis(
         prompt=prompt,
-        model_id="google/gemma-3-1b-pt",
+        model_id=model_id,
         layer=layer,
         sae_width=neuronpedia.width,
         generated_tokens=token_analyses,
         full_generated_text=full_text,
-    )
-
-
-def explain_feature(feature: ActiveFeature) -> str:
-    """Return a human-readable string describing a single active feature."""
-    desc = feature.description or "no description available"
-    return (
-        f"Feature {feature.index}\n"
-        f"  Concept : {desc}\n"
-        f"  Activation : {feature.activation:.4f}"
     )
 
 
@@ -276,35 +257,56 @@ def explain_feature(feature: ActiveFeature) -> str:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    MODEL_ID = "google/gemma-3-1b-pt"
-    LAYER = 22
-    WIDTH = "65k"
+    parser = argparse.ArgumentParser(
+        description="Extract SAE feature activations from a language model generation."
+    )
+    parser.add_argument("prompt", type=str, help="Prompt to generate from")
+    parser.add_argument(
+        "--model", default="google/gemma-3-1b-pt", help="HuggingFace model ID"
+    )
+    parser.add_argument("--layer", type=int, default=22, help="Transformer layer index")
+    parser.add_argument("--width", default="65k", help="SAE width (e.g. 65k)")
+    parser.add_argument("--l0", default="medium", help="SAE L0 target (e.g. medium)")
+    parser.add_argument(
+        "--max-tokens", type=int, default=200, help="Maximum new tokens to generate"
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("runs/analysis.json"),
+        help="Output JSON path",
+    )
+    parser.add_argument(
+        "--verbose", action="store_true", help="Print progress to stderr"
+    )
+    args = parser.parse_args()
 
-    print(f"Loading model {MODEL_ID}...")
-    model = AutoModelForCausalLM.from_pretrained(MODEL_ID, device_map="auto")
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
+    def log(msg: str) -> None:
+        if args.verbose:
+            print(msg)
 
-    print(f"Loading SAE (layer={LAYER}, width={WIDTH})...")
-    sae = load_sae(layer=LAYER, width=WIDTH, l0="medium", device=device)
+    log(f"Loading model {args.model}...")
+    model = AutoModelForCausalLM.from_pretrained(args.model, device_map="auto")
+    tokenizer = AutoTokenizer.from_pretrained(args.model)
 
-    print(f"Downloading Neuronpedia explanations for layer {LAYER} {WIDTH}...")
-    print("  Available scopes:", list_available_scopes("gemma-3-1b"))
-    neuronpedia = download_neuronpedia_explanations("gemma-3-1b", LAYER, WIDTH)
-    print(f"  Loaded {len(neuronpedia.explanations)} feature descriptions.")
+    log(f"Loading SAE (layer={args.layer}, width={args.width}, l0={args.l0})...")
+    sae = load_sae(layer=args.layer, width=args.width, l0=args.l0, device=device)
 
-    prompt = "The law of conservation of energy states that energy cannot be created or destroyed."
-    print(f"\nRunning generation inspection for prompt: {prompt!r}\n")
+    log(f"Downloading Neuronpedia explanations for layer {args.layer} {args.width}...")
+    neuronpedia = download_neuronpedia_explanations("gemma-3-1b", args.layer, args.width)
+    log(f"  Loaded {len(neuronpedia.explanations)} feature descriptions.")
 
-    result = inspect_live(prompt, model, tokenizer, sae, LAYER, neuronpedia)
+    log(f"Running generation for prompt: {args.prompt!r}")
+    result = inspect_live(
+        args.prompt,
+        model,
+        tokenizer,
+        sae,
+        args.layer,
+        neuronpedia,
+        model_id=args.model,
+        max_new_tokens=args.max_tokens,
+    )
 
-    print(f"Generated text: {result.full_generated_text!r}\n")
-    for step, tok in enumerate(result.generated_tokens, start=1):
-        print(f"Step {step:>3} | token={tok.token!r:<15} | L0={tok.l0}")
-        for feat in tok.active_features[:3]:  # print first 3 active features as sample
-            print(f"           {explain_feature(feat)}")
-        if len(tok.active_features) > 3:
-            print(f"           ... and {len(tok.active_features) - 3} more features")
-
-    output_json = Path("runs") / "analysis.json"
-    export_to_json(result, output_json)
-    print(f"\nExported analysis to {output_json}")
+    export_to_json(result, args.output)
+    log(f"Exported analysis to {args.output}")

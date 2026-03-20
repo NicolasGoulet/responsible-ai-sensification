@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 import json
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from main import GenerationAnalysis
+if TYPE_CHECKING:
+    from extract import GenerationAnalysis
 
 
 def export_to_json(analysis: GenerationAnalysis, output_path: Path) -> None:
