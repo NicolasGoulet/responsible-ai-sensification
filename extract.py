@@ -3,12 +3,16 @@
 Usage:
     uv run python extract.py "your prompt" [--model MODEL] [--layer LAYER]
         [--width WIDTH] [--l0 L0] [--max-tokens N] [--output PATH] [--verbose]
+        [--stream] [--loop]
 """
 import argparse
 import gzip
 import json
 import re
+import sys
+import time
 from pathlib import Path
+from typing import Generator
 
 import requests
 import torch
@@ -182,16 +186,18 @@ def inspect_live(
     sae: JumpReluSAE,
     layer: int,
     neuronpedia: NeuronpediaScope,
-    model_id: str,
     max_new_tokens: int = 200,
-) -> GenerationAnalysis:
-    """Generate tokens autoregressively and capture SAE feature activations at each step."""
+) -> Generator[tuple[TokenAnalysis, int], None, None]:
+    """Generate tokens autoregressively and capture SAE feature activations.
+
+    Yields (TokenAnalysis, elapsed_ms) per token. elapsed_ms covers the forward
+    pass + SAE encode + TokenAnalysis construction time.
+    """
     inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
     input_ids = inputs["input_ids"].to(device)
 
-    token_analyses: list[TokenAnalysis] = []
-
     for _ in range(max_new_tokens):
+        t0 = time.perf_counter()
         captured: list[torch.Tensor] = []
 
         def hook_fn(_module, _input, output):
@@ -220,14 +226,15 @@ def inspect_live(
         ]
 
         token_str = tokenizer.decode([next_token_id])
-        token_analyses.append(
-            TokenAnalysis(
-                token_id=next_token_id,
-                token=token_str,
-                l0=l0,
-                active_features=active_features,
-            )
+        token_analysis = TokenAnalysis(
+            token_id=next_token_id,
+            token=token_str,
+            l0=l0,
+            active_features=active_features,
         )
+
+        elapsed_ms = int((time.perf_counter() - t0) * 1000)
+        yield token_analysis, elapsed_ms
 
         if next_token_id == tokenizer.eos_token_id:
             break
@@ -236,20 +243,6 @@ def inspect_live(
             [input_ids, torch.tensor([[next_token_id]], device=device)],
             dim=1,
         )
-
-    full_text = tokenizer.decode(
-        [t.token_id for t in token_analyses],
-        skip_special_tokens=True,
-    )
-
-    return GenerationAnalysis(
-        prompt=prompt,
-        model_id=model_id,
-        layer=layer,
-        sae_width=neuronpedia.width,
-        generated_tokens=token_analyses,
-        full_generated_text=full_text,
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -276,14 +269,20 @@ if __name__ == "__main__":
         default=Path("runs/analysis.json"),
         help="Output JSON path",
     )
+    parser.add_argument("--verbose", action="store_true", help="Print progress to stderr")
     parser.add_argument(
-        "--verbose", action="store_true", help="Print progress to stderr"
+        "--stream", action="store_true", help="Emit NDJSON per token to stdout"
+    )
+    parser.add_argument(
+        "--loop",
+        action="store_true",
+        help="Replay recorded tokens indefinitely after generation (Ctrl+C to stop)",
     )
     args = parser.parse_args()
 
     def log(msg: str) -> None:
         if args.verbose:
-            print(msg)
+            print(msg, file=sys.stderr)
 
     log(f"Loading model {args.model}...")
     model = AutoModelForCausalLM.from_pretrained(args.model, device_map="auto")
@@ -296,17 +295,82 @@ if __name__ == "__main__":
     neuronpedia = download_neuronpedia_explanations("gemma-3-1b", args.layer, args.width)
     log(f"  Loaded {len(neuronpedia.explanations)} feature descriptions.")
 
+    if args.stream:
+        meta = {
+            "type": "meta",
+            "model_id": args.model,
+            "layer": args.layer,
+            "sae_width": args.width,
+        }
+        print(json.dumps(meta), flush=True)
+
     log(f"Running generation for prompt: {args.prompt!r}")
-    result = inspect_live(
-        args.prompt,
-        model,
-        tokenizer,
-        sae,
-        args.layer,
-        neuronpedia,
+
+    results: list[tuple[TokenAnalysis, int]] = []
+    try:
+        for token_analysis, elapsed_ms in inspect_live(
+            args.prompt,
+            model,
+            tokenizer,
+            sae,
+            args.layer,
+            neuronpedia,
+            max_new_tokens=args.max_tokens,
+        ):
+            results.append((token_analysis, elapsed_ms))
+
+            is_eos = token_analysis.token_id == tokenizer.eos_token_id
+            if is_eos:
+                print(f"[extract] EOS token received after {len(results)} tokens", file=sys.stderr, flush=True)
+
+            if args.stream:
+                event = {
+                    "type": "token",
+                    "token_id": token_analysis.token_id,
+                    "token": token_analysis.token,
+                    "l0": token_analysis.l0,
+                    "active_features": [f.model_dump() for f in token_analysis.active_features],
+                    "elapsed_ms": elapsed_ms,
+                }
+                print(json.dumps(event), flush=True)
+    except KeyboardInterrupt:
+        sys.exit(0)
+
+    token_analyses = [ta for ta, _ in results]
+    full_text = tokenizer.decode(
+        [t.token_id for t in token_analyses], skip_special_tokens=True
+    )
+    result = GenerationAnalysis(
+        prompt=args.prompt,
         model_id=args.model,
-        max_new_tokens=args.max_tokens,
+        layer=args.layer,
+        sae_width=args.width,
+        generated_tokens=token_analyses,
+        full_generated_text=full_text,
     )
 
     export_to_json(result, args.output)
     log(f"Exported analysis to {args.output}")
+
+    if args.loop:
+        token_events = [
+            {
+                "type": "token",
+                "token_id": ta.token_id,
+                "token": ta.token,
+                "l0": ta.l0,
+                "active_features": [f.model_dump() for f in ta.active_features],
+                "elapsed_ms": elapsed_ms,
+            }
+            for ta, elapsed_ms in results
+        ]
+        try:
+            loop_count = 0
+            while True:
+                loop_count += 1
+                print(f"[loop] starting replay iteration {loop_count} ({len(token_events)} tokens)", file=sys.stderr, flush=True)
+                for event in token_events:
+                    print(json.dumps(event), flush=True)
+                    time.sleep(event["elapsed_ms"] / 1000)
+        except KeyboardInterrupt:
+            pass

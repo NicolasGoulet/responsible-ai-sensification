@@ -1,48 +1,27 @@
-"""synthesize.py: Read a GenerationAnalysis JSON and produce a WAV file.
+"""synthesize.py: Read a GenerationAnalysis JSON and produce a WAV file, or play live.
 
 Usage:
+    # Batch mode (writes WAV):
     python synthesize.py <input.json> [--output-dir audio]
+
+    # Live mode (reads MusicalEvent NDJSON from stdin):
+    ... | python synthesize.py --live [--mode timed|sustain]
 """
 import argparse
 import json
+import sys
+import threading
 from pathlib import Path
 
 import numpy as np
 import soundfile as sf
 
-SAMPLE_RATE = 22050
-TOKEN_DURATION = 0.5  # seconds per token
-SAMPLES_PER_TOKEN = int(SAMPLE_RATE * TOKEN_DURATION)
-
-NUM_INSTRUMENTS = 5
-FEATURES_PER_INSTRUMENT = 13000  # each instrument covers 13k features
-FREQ_MIN = 20.0
-FREQ_MAX = 20000.0
-
-
-def feature_to_frequency(feature_index: int) -> float:
-    """Map a feature index (0-64999) to a frequency in Hz using log scale."""
-    instrument = feature_index // FEATURES_PER_INSTRUMENT
-    local_index = feature_index % FEATURES_PER_INSTRUMENT
-    # Clamp instrument in case of edge cases
-    instrument = min(instrument, NUM_INSTRUMENTS - 1)
-    # Each instrument has its own log-mapped sub-range
-    # We use the same formula across all instruments based on local index
-    freq = FREQ_MIN * (FREQ_MAX / FREQ_MIN) ** (local_index / FEATURES_PER_INSTRUMENT)
-    return freq
-
-
-def generate_token_audio(active_features: list[dict]) -> np.ndarray:
-    """Sum sine waves for all active features, return normalized float32 array."""
-    t = np.linspace(0, TOKEN_DURATION, SAMPLES_PER_TOKEN, endpoint=False)
-    buffer = np.zeros(SAMPLES_PER_TOKEN, dtype=np.float64)
-
-    for feat in active_features:
-        freq = feature_to_frequency(feat["index"])
-        amplitude = feat["activation"]
-        buffer += amplitude * np.sin(2 * np.pi * freq * t)
-
-    return buffer
+from audio_utils import (
+    SAMPLE_RATE,
+    SAMPLES_PER_TOKEN,
+    feature_to_frequency,
+    generate_token_audio,
+)
 
 
 def synthesize_additive(input_path: Path, output_dir: Path) -> Path:
@@ -56,10 +35,13 @@ def synthesize_additive(input_path: Path, output_dir: Path) -> Path:
     for i, tok in enumerate(tokens):
         start = i * SAMPLES_PER_TOKEN
         end = start + SAMPLES_PER_TOKEN
-        segment = generate_token_audio(tok["active_features"])
+        notes = [
+            {"freq": feature_to_frequency(f["index"]), "amplitude": f["activation"]}
+            for f in tok["active_features"]
+        ]
+        segment = generate_token_audio(notes)
         audio[start:end] = segment
 
-    # Normalize to prevent clipping
     peak = np.max(np.abs(audio))
     if peak > 0:
         audio = audio / peak
@@ -73,23 +55,122 @@ def synthesize_additive(input_path: Path, output_dir: Path) -> Path:
     return output_path
 
 
+def _ndjson_tokens(source):
+    """Yield token event dicts from an NDJSON source (file or stdin lines)."""
+    for line in source:
+        line = line.strip()
+        if not line:
+            continue
+        data = json.loads(line)
+        if data.get("type") == "token":
+            yield data
+
+
+def live_timed(source):
+    """Play each token's audio for exactly TOKEN_DURATION seconds."""
+    import sounddevice as sd
+
+    for event in _ndjson_tokens(source):
+        notes = event.get("notes", [])
+        segment = generate_token_audio(notes)
+        peak = np.max(np.abs(segment))
+        if peak > 0:
+            segment = segment / peak
+        sd.play(segment.astype(np.float32), samplerate=SAMPLE_RATE, blocking=True)
+
+
+def live_sustain(source):
+    """Play audio continuously, hard-cutting to the new sound on each token arrival."""
+    import sounddevice as sd
+
+    silence = np.zeros(SAMPLES_PER_TOKEN, dtype=np.float32)
+    lock = threading.Lock()
+    state = {"buf": silence, "pos": 0}
+
+    def callback(outdata, frames, time_info, status):
+        with lock:
+            buf = state["buf"]
+            pos = state["pos"]
+            remaining = len(buf) - pos
+            if frames <= remaining:
+                out = buf[pos : pos + frames]
+                state["pos"] = pos + frames
+            else:
+                overflow = frames - remaining
+                out = np.concatenate([buf[pos:], buf[:overflow]])
+                state["pos"] = overflow
+        outdata[:, 0] = out
+
+    try:
+        stream = sd.OutputStream(
+            samplerate=SAMPLE_RATE,
+            channels=1,
+            dtype="float32",
+            latency="high",
+            callback=callback,
+        )
+    except sd.PortAudioError as e:
+        print(
+            f"Audio device error: {e}\n"
+            "On WSL2, install PulseAudio: sudo apt install pulseaudio\n"
+            "Then start it: pulseaudio --start",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    with stream:
+        try:
+            for event in _ndjson_tokens(source):
+                notes = event.get("notes", [])
+                segment = generate_token_audio(notes)
+                peak = np.max(np.abs(segment))
+                if peak > 0:
+                    segment = segment / peak
+                with lock:
+                    state["buf"] = segment.astype(np.float32)
+                    state["pos"] = 0
+        except KeyboardInterrupt:
+            pass
+
+
 METHODS = {
     "additive": synthesize_additive,
 }
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Synthesize SAE feature audio from JSON")
-    parser.add_argument("input", type=Path, help="Input JSON file")
-    parser.add_argument("--output-dir", type=Path, default=Path("audio"), help="Output directory")
+    parser = argparse.ArgumentParser(description="Synthesize SAE feature audio from JSON or stdin")
+    parser.add_argument(
+        "input", nargs="?", type=Path, help="Input JSON file (omit with --live to read stdin)"
+    )
+    parser.add_argument(
+        "--output-dir", type=Path, default=Path("audio"), help="Output directory (batch mode)"
+    )
     parser.add_argument(
         "--method",
         default="additive",
         choices=list(METHODS.keys()),
         help="Synthesis method (default: additive)",
     )
+    parser.add_argument("--live", action="store_true", help="Play audio live from NDJSON stdin")
+    parser.add_argument(
+        "--mode",
+        default="timed",
+        choices=["timed", "sustain"],
+        help="Live playback mode: timed (fixed 0.5s/token) or sustain (hold until next token)",
+    )
     args = parser.parse_args()
-    METHODS[args.method](args.input, args.output_dir)
+
+    if args.live:
+        source = sys.stdin if args.input is None else open(args.input)
+        if args.mode == "sustain":
+            live_sustain(source)
+        else:
+            live_timed(source)
+    else:
+        if args.input is None:
+            parser.error("input is required in batch mode (omit only with --live)")
+        METHODS[args.method](args.input, args.output_dir)
 
 
 if __name__ == "__main__":
