@@ -1,6 +1,151 @@
 "use strict";
 
+// ── WebAudioEngine ─────────────────────────────────────────────────────────
+class WebAudioEngine {
+  constructor() {
+    this._audioCtx   = null;
+    this._masterGain = null;
+    this._activeNodes = [];
+  }
+
+  resume() {
+    if (!this._audioCtx) {
+      this._audioCtx   = new AudioContext();
+      this._masterGain = this._audioCtx.createGain();
+      this._masterGain.gain.value = 1.0;
+      this._masterGain.connect(this._audioCtx.destination);
+    }
+    this._audioCtx.resume();
+  }
+
+  _buildNoteGraph(freq, amplitude, instrument, startTime, stopTime) {
+    const actx  = this._audioCtx;
+    const nodes = [];
+
+    const makeOsc = (frequency, gainValue) => {
+      const osc = actx.createOscillator();
+      const g   = actx.createGain();
+      osc.type            = "sine";
+      osc.frequency.value = frequency;
+      g.gain.value        = Math.max(gainValue, 0.0001);
+      osc.connect(g);
+      g.connect(this._masterGain);
+      osc.start(startTime);
+      if (stopTime !== null) osc.stop(stopTime);
+      nodes.push({ osc, gain: g });
+      return g;
+    };
+
+    switch (instrument) {
+      case "piano":
+        makeOsc(freq,     amplitude);
+        makeOsc(freq * 2, amplitude * 0.5);
+        break;
+
+      case "guitar":
+        makeOsc(freq,     amplitude);
+        makeOsc(freq * 2, amplitude * 0.3);
+        makeOsc(freq * 3, amplitude * 0.2);
+        break;
+
+      case "bass":
+        makeOsc(freq,     amplitude);
+        makeOsc(freq / 2, amplitude * 0.6);
+        break;
+
+      case "strings":
+        makeOsc(freq,     amplitude);
+        makeOsc(freq + 2, amplitude);
+        break;
+
+      case "pad": {
+        const g = makeOsc(freq, 0.0001);
+        if (stopTime !== null) {
+          const mid = (startTime + stopTime) / 2;
+          g.gain.setValueAtTime(0.0001, startTime);
+          g.gain.linearRampToValueAtTime(Math.max(amplitude, 0.0001), mid);
+          g.gain.linearRampToValueAtTime(0.0001, stopTime);
+        } else {
+          g.gain.value = Math.max(amplitude, 0.0001);
+        }
+        break;
+      }
+
+      case "bell": {
+        const bellPartials = [
+          makeOsc(freq,     amplitude),
+          makeOsc(freq * 2, amplitude * 0.4),
+          makeOsc(freq * 5, amplitude * 0.2),
+        ];
+        if (stopTime !== null) {
+          for (const g of bellPartials) {
+            g.gain.setValueAtTime(g.gain.value, startTime);
+            g.gain.exponentialRampToValueAtTime(0.0001, stopTime);
+          }
+        } else {
+          for (const g of bellPartials) {
+            g.gain.setValueAtTime(g.gain.value, startTime);
+            g.gain.exponentialRampToValueAtTime(Math.max(g.gain.value * 0.1, 0.0001), startTime + 2);
+          }
+        }
+        break;
+      }
+
+      case "flute":
+        makeOsc(freq, amplitude);
+        break;
+
+      case "brass":
+        makeOsc(freq,     amplitude);
+        makeOsc(freq * 2, amplitude * 0.7);
+        makeOsc(freq * 3, amplitude * 0.5);
+        makeOsc(freq * 4, amplitude * 0.3);
+        break;
+
+      default:
+        makeOsc(freq, amplitude);
+    }
+
+    return nodes;
+  }
+
+  playNotes(notes, mode, bpm) {
+    if (!this._audioCtx || !notes.length) return;
+
+    const maxAmp     = Math.max(...notes.map(n => n.amplitude ?? 0), 1);
+    const durationSec = mode === "timed" ? 60 / bpm : null;
+    const startTime  = this._audioCtx.currentTime;
+    const stopTime   = durationSec !== null ? startTime + durationSec : null;
+
+    if (mode === "sustain") this.stopAll();
+
+    for (const note of notes) {
+      const newNodes = this._buildNoteGraph(
+        note.freq      ?? 440,
+        (note.amplitude ?? 0) / maxAmp,
+        note.instrument ?? "default",
+        startTime,
+        stopTime
+      );
+      this._activeNodes.push(...newNodes);
+    }
+  }
+
+  stopAll() {
+    const t = this._audioCtx ? this._audioCtx.currentTime : 0;
+    for (const { osc } of this._activeNodes) {
+      try { osc.stop(t); } catch {}
+    }
+    this._activeNodes = [];
+  }
+
+  setVolume(v) {
+    if (this._masterGain) this._masterGain.gain.value = v;
+  }
+}
+
 // ── State ──────────────────────────────────────────────────────────────────
+const engine = new WebAudioEngine();
 let ws = null;
 let isRunning = false;
 let tokenCount = 0;
@@ -43,6 +188,7 @@ const modeHelp        = document.getElementById("mode-help");
 const bpmGroup        = document.getElementById("bpm-group");
 const bpmIn           = document.getElementById("bpm");
 const loopCb          = document.getElementById("loop");
+const volumeIn        = document.getElementById("volume");
 
 // ── Load options + defaults ─────────────────────────────────────────────────
 async function loadOptions() {
@@ -202,6 +348,7 @@ function handleMessage(msg) {
         loopCountEl.classList.remove("hidden");
       }
       drawNotes(msg.notes ?? []);
+      engine.playNotes(msg.notes ?? [], modeSel.value, parseInt(bpmIn.value));
       break;
 
     case "done":
@@ -209,10 +356,12 @@ function handleMessage(msg) {
       break;
 
     case "silent":
+      engine.stopAll();
       setStatus("Silent");
       break;
 
     case "stopped":
+      engine.stopAll();
       setIdle();
       break;
 
@@ -289,6 +438,8 @@ function setRunning() {
 // ── Control wiring ─────────────────────────────────────────────────────────
 function startPipeline() {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  engine.resume();
+  engine.setVolume(parseFloat(volumeIn.value));
   setRunning();
   ws.send(JSON.stringify({ action: "start", params: collectParams() }));
 }
@@ -298,6 +449,7 @@ btnSend.addEventListener("click", startPipeline);
 
 btnStop.addEventListener("click", () => {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  engine.stopAll();
   ws.send(JSON.stringify({ action: "stop" }));
 });
 
@@ -336,6 +488,8 @@ modeSel.addEventListener("change", () => {
 
 bpmIn.addEventListener("input", () => { sendParamUpdate({ bpm: parseInt(bpmIn.value) }); saveParams(); });
 loopCb.addEventListener("change", () => { sendParamUpdate({ loop: loopCb.checked }); saveParams(); });
+
+volumeIn.addEventListener("input", () => engine.setVolume(parseFloat(volumeIn.value)));
 
 // ── Init ───────────────────────────────────────────────────────────────────
 loadOptions();
