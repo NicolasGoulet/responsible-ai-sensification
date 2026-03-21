@@ -15,7 +15,7 @@ from pathlib import Path
 
 import torch
 
-from audio_utils import feature_to_frequency
+from app.server.pipeline.audio_utils import feature_to_frequency
 
 INSTRUMENT_LIST = ["piano", "guitar", "bass", "strings", "pad", "bell", "flute", "brass"]
 CACHE_DIR = Path("neuronpedia_cache")

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAE Sensification</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top bar: prompt + start/stop -->
+    <header class="top-bar">
+      <input id="prompt" type="text" placeholder="Enter prompt…" />
+      <button id="btn-start" class="btn-start">Start</button>
+      <button id="btn-stop" class="btn-stop" disabled>Stop</button>
+    </header>
+
+    <main class="main-layout">
+      <!-- Left panel: controls -->
+      <aside class="controls">
+        <section class="control-group">
+          <label>Strategy</label>
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-strategy="identity">Raw</button>
+            <button class="toggle-btn" data-strategy="cluster">Cluster</button>
+          </div>
+        </section>
+
+        <section class="control-group">
+          <label for="layer">Layer: <span id="layer-val">22</span></label>
+          <input id="layer" type="range" min="0" max="28" value="22" />
+        </section>
+
+        <section class="control-group">
+          <label for="width">Width</label>
+          <select id="width">
+            <option value="16k">16k</option>
+            <option value="65k" selected>65k</option>
+            <option value="262k">262k</option>
+            <option value="1m">1m</option>
+          </select>
+        </section>
+
+        <section class="control-group">
+          <label for="clusters">Clusters: <span id="clusters-val">8</span></label>
+          <input id="clusters" type="range" min="2" max="32" value="8" />
+        </section>
+
+        <section class="control-group">
+          <label for="max-tokens">Max tokens: <span id="max-tokens-val">200</span></label>
+          <input id="max-tokens" type="range" min="10" max="500" value="200" />
+        </section>
+
+        <section class="control-group">
+          <label>Mode</label>
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-mode="timed">Timed</button>
+            <button class="toggle-btn" data-mode="sustain">Sustain</button>
+          </div>
+        </section>
+
+        <section class="control-group">
+          <label class="checkbox-label">
+            <input id="loop" type="checkbox" />
+            Loop
+          </label>
+        </section>
+
+        <div id="status" class="status">Ready</div>
+      </aside>
+
+      <!-- Right panel: visualizations -->
+      <section class="visuals">
+        <canvas id="waveform" width="600" height="300"></canvas>
+
+        <div id="image-placeholder">
+          <span>Todo: image generation</span>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

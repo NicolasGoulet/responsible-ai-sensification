@@ -12,6 +12,44 @@ sudo apt install libportaudio2
 
 source code : https://colab.research.google.com/drive/1NhWjg7n0nhfW--CjtsOdw5A5J_-Bzn4r#scrollTo=nOBcV4om7mrT
 
+## Directory Layout
+
+```
+app/
+  client/          # Vanilla-JS browser frontend
+    index.html
+    style.css
+    main.js
+  server/
+    main.py        # FastAPI app factory
+    session.py     # PipelineParams + PipelineSession
+    pipeline/      # Moved pipeline scripts
+      extract.py
+      transform.py
+      synthesize.py
+      audio_utils.py
+      export.py
+    routers/
+      config.py    # GET /api/config/defaults
+      stream.py    # WS /ws/stream
+scripts/
+  start.sh         # Start uvicorn server
+  stop.sh          # Kill uvicorn on port 8000
+specs/             # Feature specs + TODO backlog
+```
+
+## Web Server
+
+```bash
+# Start the server and open http://localhost:8000
+./scripts/start.sh
+
+# Stop the server
+./scripts/stop.sh
+```
+
+The browser UI lets you set a prompt, choose strategy/layer/width/clusters, and click **Start** — all without touching the CLI. Parameters can be tweaked mid-generation.
+
 ## CLI Tools
 
 ### extract.py
@@ -19,7 +57,7 @@ source code : https://colab.research.google.com/drive/1NhWjg7n0nhfW--CjtsOdw5A5J
 Loads a model + SAE + Neuronpedia explanations, generates tokens autoregressively, and writes a JSON file with per-token SAE feature activations.
 
 ```
-uv run python extract.py PROMPT [--model MODEL] [--layer LAYER] [--width WIDTH]
+uv run python app/server/pipeline/extract.py PROMPT [--model MODEL] [--layer LAYER] [--width WIDTH]
                                 [--l0 L0] [--max-tokens N] [--output PATH] [--verbose]
                                 [--stream] [--loop]
 ```
@@ -42,7 +80,7 @@ uv run python extract.py PROMPT [--model MODEL] [--layer LAYER] [--width WIDTH]
 Reads a `GenerationAnalysis` JSON and renders a WAV file, or plays live audio from a `MusicalEvent` NDJSON stream.
 
 ```
-uv run python synthesize.py [INPUT] [--method METHOD] [--output-dir DIR]
+uv run python app/server/pipeline/synthesize.py [INPUT] [--method METHOD] [--output-dir DIR]
                              [--live] [--mode timed|sustain]
 ```
 
@@ -59,7 +97,7 @@ uv run python synthesize.py [INPUT] [--method METHOD] [--output-dir DIR]
 Transforms a `TokenStream` NDJSON (from `extract.py --stream`) into a `MusicalEvent` NDJSON stream with frequency/amplitude/instrument assignments.
 
 ```
-uv run python transform.py [INPUT] [--strategy identity|cluster] [--clusters N] [--embed-model MODEL]
+uv run python app/server/pipeline/transform.py [INPUT] [--strategy identity|cluster] [--clusters N] [--embed-model MODEL]
 ```
 
 | Flag | Default | Description |
@@ -72,29 +110,29 @@ uv run python transform.py [INPUT] [--strategy identity|cluster] [--clusters N] 
 ### Basic pipeline
 
 ```bash
-uv run python extract.py "The law of conservation of energy" --layer 22 --width 65k --verbose
-uv run python synthesize.py runs/analysis.json --method additive
+uv run python app/server/pipeline/extract.py "The law of conservation of energy" --layer 22 --width 65k --verbose
+uv run python app/server/pipeline/synthesize.py runs/analysis.json --method additive
 ```
 
 ### Streaming live pipeline
 
 ```bash
 # Identity strategy, timed mode (0.5 s per token):
-uv run python extract.py "hello world" --stream --max-tokens 20 \
-  | uv run python transform.py --strategy identity \
-  | uv run python synthesize.py --live --mode timed
+uv run python app/server/pipeline/extract.py "hello world" --stream --max-tokens 20 \
+  | uv run python app/server/pipeline/transform.py --strategy identity \
+  | uv run python app/server/pipeline/synthesize.py --live --mode timed
 
 # Cluster strategy, sustain mode (each note holds until next token arrives):
-uv run python extract.py "hello world" --stream --max-tokens 20 \
-  | uv run python transform.py --strategy cluster --clusters 8 \
-  | uv run python synthesize.py --live --mode sustain
+uv run python app/server/pipeline/extract.py "hello world" --stream --max-tokens 20 \
+  | uv run python app/server/pipeline/transform.py --strategy cluster --clusters 8 \
+  | uv run python app/server/pipeline/synthesize.py --live --mode sustain
 
 # Loop mode — replay the generation indefinitely (Ctrl+C to stop):
-uv run python extract.py "hello world" --stream --loop --max-tokens 20 \
-  | uv run python transform.py --strategy identity \
-  | uv run python synthesize.py --live --mode timed
+uv run python app/server/pipeline/extract.py "hello world" --stream --loop --max-tokens 20 \
+  | uv run python app/server/pipeline/transform.py --strategy identity \
+  | uv run python app/server/pipeline/synthesize.py --live --mode timed
 
 # Build cluster map first from a batch JSON, then stream it live:
-uv run python transform.py runs/analysis.json --strategy cluster --clusters 8 \
-  | uv run python synthesize.py --live --mode timed
+uv run python app/server/pipeline/transform.py runs/analysis.json --strategy cluster --clusters 8 \
+  | uv run python app/server/pipeline/synthesize.py --live --mode timed
 ```

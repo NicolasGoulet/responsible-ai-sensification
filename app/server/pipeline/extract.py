@@ -22,7 +22,7 @@ from pydantic import BaseModel
 from safetensors.torch import load_file
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from export import export_to_json
+from app.server.pipeline.export import export_to_json
 
 torch.set_grad_enabled(False)
 device = "cuda" if torch.cuda.is_available() else "cpu"
