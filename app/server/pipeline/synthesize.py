@@ -16,7 +16,7 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
-from audio_utils import (
+from app.server.pipeline.audio_utils import (
     SAMPLE_RATE,
     SAMPLES_PER_TOKEN,
     feature_to_frequency,

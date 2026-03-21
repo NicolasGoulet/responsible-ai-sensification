@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAE Sensification</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top bar: prompt + start/stop -->
+    <header class="top-bar">
+      <input id="prompt" type="text" placeholder="Enter prompt…" />
+      <button id="btn-send" class="btn-send" disabled title="Restart generation with current prompt">↺</button>
+      <button id="btn-start" class="btn-start">Start</button>
+      <button id="btn-stop" class="btn-stop" disabled>Stop</button>
+    </header>
+
+    <main class="main-layout">
+      <!-- Left panel: controls -->
+      <aside class="controls">
+
+        <section class="control-group">
+          <label>Model</label>
+          <select id="model"></select>
+        </section>
+
+        <section class="control-group">
+          <label>Layer</label>
+          <select id="layer"></select>
+        </section>
+
+        <section class="control-group">
+          <label>Width</label>
+          <select id="width"></select>
+        </section>
+
+        <section class="control-group">
+          <label class="control-label-row">
+            Strategy
+            <span class="help-icon" id="strategy-help" data-tooltip="">?</span>
+          </label>
+          <select id="strategy"></select>
+        </section>
+
+        <div id="clusters-group" class="hidden">
+          <section class="control-group">
+            <label>Clusters</label>
+            <input id="clusters" type="number" min="2" max="128" value="8" />
+          </section>
+        </div>
+
+        <section class="control-group">
+          <label class="control-label-row">
+            Max tokens
+            <span class="help-icon" data-tooltip="Set to 0 for unlimited tokens.">?</span>
+          </label>
+          <input id="max-tokens" type="number" min="0" value="200" />
+        </section>
+
+        <section class="control-group">
+          <label class="control-label-row">
+            Mode
+            <span class="help-icon" id="mode-help" data-tooltip="">?</span>
+          </label>
+          <select id="mode"></select>
+        </section>
+
+        <div id="bpm-group" class="hidden">
+          <section class="control-group">
+            <label class="control-label-row">
+              BPM
+              <span class="help-icon" data-tooltip="Beats per minute — controls how fast tokens are paced in timed mode. 60 BPM = 1 s/token, 120 BPM = 0.5 s/token.">?</span>
+            </label>
+            <input id="bpm" type="number" min="1" max="600" value="120" />
+          </section>
+        </div>
+
+        <section class="control-group">
+          <label class="checkbox-label">
+            <input id="loop" type="checkbox" />
+            Loop
+          </label>
+        </section>
+
+        <section class="control-group">
+          <label>Volume</label>
+          <input id="volume" type="range" min="0" max="1" step="0.01" value="0.7" />
+        </section>
+
+        <div id="status" class="status">
+          <span id="status-text">Ready</span>
+          <span id="loop-count-display" class="loop-counter hidden">Loop: 0</span>
+        </div>
+      </aside>
+
+      <!-- Right panel: visualizations -->
+      <section class="visuals">
+        <canvas id="waveform" width="600" height="300"></canvas>
+
+        <div id="image-placeholder">
+          <span>Todo: image generation</span>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

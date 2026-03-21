@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from extract import GenerationAnalysis
+    from app.server.pipeline.extract import GenerationAnalysis
 
 
 def export_to_json(analysis: GenerationAnalysis, output_path: Path) -> None:
