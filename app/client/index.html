@@ -11,6 +11,7 @@
     <!-- Top bar: prompt + start/stop -->
     <header class="top-bar">
       <input id="prompt" type="text" placeholder="Enter prompt…" />
+      <button id="btn-send" class="btn-send" disabled title="Restart generation with current prompt">↺</button>
       <button id="btn-start" class="btn-start">Start</button>
       <button id="btn-stop" class="btn-stop" disabled>Stop</button>
     </header>
@@ -18,46 +19,62 @@
     <main class="main-layout">
       <!-- Left panel: controls -->
       <aside class="controls">
+
         <section class="control-group">
-          <label>Strategy</label>
-          <div class="toggle-group">
-            <button class="toggle-btn active" data-strategy="identity">Raw</button>
-            <button class="toggle-btn" data-strategy="cluster">Cluster</button>
-          </div>
+          <label>Model</label>
+          <select id="model"></select>
         </section>
 
         <section class="control-group">
-          <label for="layer">Layer: <span id="layer-val">22</span></label>
-          <input id="layer" type="range" min="0" max="28" value="22" />
+          <label>Layer</label>
+          <select id="layer"></select>
         </section>
 
         <section class="control-group">
-          <label for="width">Width</label>
-          <select id="width">
-            <option value="16k">16k</option>
-            <option value="65k" selected>65k</option>
-            <option value="262k">262k</option>
-            <option value="1m">1m</option>
-          </select>
+          <label>Width</label>
+          <select id="width"></select>
         </section>
 
         <section class="control-group">
-          <label for="clusters">Clusters: <span id="clusters-val">8</span></label>
-          <input id="clusters" type="range" min="2" max="32" value="8" />
+          <label class="control-label-row">
+            Strategy
+            <span class="help-icon" id="strategy-help" data-tooltip="">?</span>
+          </label>
+          <select id="strategy"></select>
+        </section>
+
+        <div id="clusters-group" class="hidden">
+          <section class="control-group">
+            <label>Clusters</label>
+            <input id="clusters" type="number" min="2" max="128" value="8" />
+          </section>
+        </div>
+
+        <section class="control-group">
+          <label class="control-label-row">
+            Max tokens
+            <span class="help-icon" data-tooltip="Set to 0 for unlimited tokens.">?</span>
+          </label>
+          <input id="max-tokens" type="number" min="0" value="200" />
         </section>
 
         <section class="control-group">
-          <label for="max-tokens">Max tokens: <span id="max-tokens-val">200</span></label>
-          <input id="max-tokens" type="range" min="10" max="500" value="200" />
+          <label class="control-label-row">
+            Mode
+            <span class="help-icon" id="mode-help" data-tooltip="">?</span>
+          </label>
+          <select id="mode"></select>
         </section>
 
-        <section class="control-group">
-          <label>Mode</label>
-          <div class="toggle-group">
-            <button class="toggle-btn active" data-mode="timed">Timed</button>
-            <button class="toggle-btn" data-mode="sustain">Sustain</button>
-          </div>
-        </section>
+        <div id="bpm-group" class="hidden">
+          <section class="control-group">
+            <label class="control-label-row">
+              BPM
+              <span class="help-icon" data-tooltip="Beats per minute — controls how fast tokens are paced in timed mode. 60 BPM = 1 s/token, 120 BPM = 0.5 s/token.">?</span>
+            </label>
+            <input id="bpm" type="number" min="1" max="600" value="120" />
+          </section>
+        </div>
 
         <section class="control-group">
           <label class="checkbox-label">
@@ -66,7 +83,10 @@
           </label>
         </section>
 
-        <div id="status" class="status">Ready</div>
+        <div id="status" class="status">
+          <span id="status-text">Ready</span>
+          <span id="loop-count-display" class="loop-counter hidden">Loop: 0</span>
+        </div>
       </aside>
 
       <!-- Right panel: visualizations -->

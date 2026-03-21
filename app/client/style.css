@@ -85,6 +85,13 @@ button:disabled {
   color: #fff;
 }
 
+.btn-send {
+  background: var(--border);
+  color: var(--accent);
+  font-size: 16px;
+  padding: 8px 12px;
+}
+
 /* ── Main layout ── */
 .main-layout {
   display: flex;
@@ -191,6 +198,81 @@ select:focus {
   color: var(--text-muted);
   min-height: 34px;
   word-break: break-word;
+}
+
+/* ── Utilities ── */
+.hidden { display: none !important; }
+
+/* ── Control label row (label + help icon inline) ── */
+.control-label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Help icon with CSS tooltip ── */
+.help-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--text-muted);
+  font-size: 10px;
+  cursor: help;
+  flex-shrink: 0;
+}
+
+.help-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  padding: 8px 10px;
+  background: #222244;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  white-space: normal;
+  z-index: 100;
+}
+
+.help-icon:hover::after { opacity: 1; }
+
+/* ── Number inputs ── */
+input[type="number"] {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="number"]:focus {
+  border-color: var(--accent);
+}
+
+/* ── Loop counter ── */
+.loop-counter {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--accent);
+  text-align: right;
 }
 
 /* ── Visuals ── */

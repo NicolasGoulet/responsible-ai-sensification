@@ -4,26 +4,78 @@
 let ws = null;
 let isRunning = false;
 let tokenCount = 0;
+let catalogue = {};        // modelId -> { layers: [...], widths: [...] }
+let strategyDescs = {};    // value -> description
+let modeDescs = {};        // value -> description
 
 // ── DOM refs ───────────────────────────────────────────────────────────────
-const prompt     = document.getElementById("prompt");
-const btnStart   = document.getElementById("btn-start");
-const btnStop    = document.getElementById("btn-stop");
-const statusEl   = document.getElementById("status");
-const canvas     = document.getElementById("waveform");
-const ctx        = canvas.getContext("2d");
+const prompt          = document.getElementById("prompt");
+const btnSend         = document.getElementById("btn-send");
+const btnStart        = document.getElementById("btn-start");
+const btnStop         = document.getElementById("btn-stop");
+const statusEl        = document.getElementById("status");
+const statusText      = document.getElementById("status-text");
+const loopCountEl     = document.getElementById("loop-count-display");
+const canvas          = document.getElementById("waveform");
+const ctx             = canvas.getContext("2d");
 
-const layerInput  = document.getElementById("layer");
-const layerVal    = document.getElementById("layer-val");
-const widthSel    = document.getElementById("width");
-const clustersIn  = document.getElementById("clusters");
-const clustersVal = document.getElementById("clusters-val");
-const maxTokensIn = document.getElementById("max-tokens");
-const maxTokensVal= document.getElementById("max-tokens-val");
-const loopCb      = document.getElementById("loop");
+const modelSel        = document.getElementById("model");
+const layerSel        = document.getElementById("layer");
+const widthSel        = document.getElementById("width");
+const strategySel     = document.getElementById("strategy");
+const strategyHelp    = document.getElementById("strategy-help");
+const clustersGroup   = document.getElementById("clusters-group");
+const clustersIn      = document.getElementById("clusters");
+const maxTokensIn     = document.getElementById("max-tokens");
+const modeSel         = document.getElementById("mode");
+const modeHelp        = document.getElementById("mode-help");
+const bpmGroup        = document.getElementById("bpm-group");
+const bpmIn           = document.getElementById("bpm");
+const loopCb          = document.getElementById("loop");
 
-// ── Populate defaults ──────────────────────────────────────────────────────
-async function loadDefaults() {
+// ── Load options + defaults ─────────────────────────────────────────────────
+async function loadOptions() {
+  try {
+    const res = await fetch("/api/config/model-options");
+    const data = await res.json();
+
+    catalogue = data.model_catalogue ?? {};
+
+    // Populate model dropdown
+    data.models.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      modelSel.appendChild(opt);
+    });
+
+    // Populate layer/width based on first model
+    if (modelSel.value) populateLayerWidth(modelSel.value);
+
+    // Populate strategy dropdown
+    data.strategies.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.value;
+      opt.textContent = s.label;
+      strategySel.appendChild(opt);
+      strategyDescs[s.value] = s.description;
+    });
+    updateStrategyHelp();
+
+    // Populate mode dropdown
+    data.modes.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m.value;
+      opt.textContent = m.label;
+      modeSel.appendChild(opt);
+      modeDescs[m.value] = m.description;
+    });
+    updateModeHelp();
+
+  } catch (e) {
+    console.warn("Could not load model options", e);
+  }
+
   try {
     const res = await fetch("/api/config/defaults");
     const d = await res.json();
@@ -33,40 +85,74 @@ async function loadDefaults() {
   }
 }
 
-function applyParams(p) {
-  if (p.prompt !== undefined)    prompt.value = p.prompt;
-  if (p.layer  !== undefined)  { layerInput.value = p.layer; layerVal.textContent = p.layer; }
-  if (p.width  !== undefined)    widthSel.value = p.width;
-  if (p.clusters !== undefined){ clustersIn.value = p.clusters; clustersVal.textContent = p.clusters; }
-  if (p.max_tokens !== undefined){ maxTokensIn.value = p.max_tokens; maxTokensVal.textContent = p.max_tokens; }
-  if (p.loop !== undefined)      loopCb.checked = p.loop;
+function populateLayerWidth(modelId) {
+  const info = catalogue[modelId] ?? { layers: [], widths: [] };
 
-  if (p.strategy !== undefined) {
-    document.querySelectorAll("[data-strategy]").forEach(b => {
-      b.classList.toggle("active", b.dataset.strategy === p.strategy);
-    });
-  }
-  if (p.mode !== undefined) {
-    document.querySelectorAll("[data-mode]").forEach(b => {
-      b.classList.toggle("active", b.dataset.mode === p.mode);
-    });
-  }
+  layerSel.innerHTML = "";
+  info.layers.forEach(l => {
+    const opt = document.createElement("option");
+    opt.value = l;
+    opt.textContent = l;
+    layerSel.appendChild(opt);
+  });
+
+  widthSel.innerHTML = "";
+  info.widths.forEach(w => {
+    const opt = document.createElement("option");
+    opt.value = w;
+    opt.textContent = w;
+    widthSel.appendChild(opt);
+  });
+}
+
+function updateStrategyHelp() {
+  strategyHelp.dataset.tooltip = strategyDescs[strategySel.value] ?? "";
+}
+
+function updateModeHelp() {
+  modeHelp.dataset.tooltip = modeDescs[modeSel.value] ?? "";
+}
+
+function applyParams(p) {
+  if (p.prompt     !== undefined) prompt.value       = p.prompt;
+  if (p.model      !== undefined) modelSel.value     = p.model;
+  if (p.layer      !== undefined) layerSel.value     = p.layer;
+  if (p.width      !== undefined) widthSel.value     = p.width;
+  if (p.strategy   !== undefined) { strategySel.value = p.strategy; updateStrategyHelp(); }
+  if (p.clusters   !== undefined) clustersIn.value   = p.clusters;
+  if (p.max_tokens !== undefined) maxTokensIn.value  = p.max_tokens;
+  if (p.mode       !== undefined) { modeSel.value = p.mode; updateModeHelp(); }
+  if (p.bpm        !== undefined) bpmIn.value        = p.bpm;
+  if (p.loop       !== undefined) loopCb.checked     = p.loop;
+
+  // Sync conditional visibility
+  if (p.strategy !== undefined) syncClustersVisibility();
+  if (p.mode     !== undefined) syncBpmVisibility();
 }
 
 // ── Collect current params ─────────────────────────────────────────────────
 function collectParams() {
-  const strategy = document.querySelector("[data-strategy].active")?.dataset.strategy ?? "identity";
-  const mode     = document.querySelector("[data-mode].active")?.dataset.mode ?? "timed";
   return {
     prompt:     prompt.value,
-    strategy,
-    layer:      parseInt(layerInput.value),
+    model:      modelSel.value,
+    layer:      parseInt(layerSel.value),
     width:      widthSel.value,
+    strategy:   strategySel.value,
     clusters:   parseInt(clustersIn.value),
     max_tokens: parseInt(maxTokensIn.value),
+    mode:       modeSel.value,
+    bpm:        parseInt(bpmIn.value),
     loop:       loopCb.checked,
-    mode,
   };
+}
+
+// ── Conditional visibility ─────────────────────────────────────────────────
+function syncClustersVisibility() {
+  clustersGroup.classList.toggle("hidden", strategySel.value !== "cluster");
+}
+
+function syncBpmVisibility() {
+  bpmGroup.classList.toggle("hidden", modeSel.value !== "timed");
 }
 
 // ── WebSocket ──────────────────────────────────────────────────────────────
@@ -97,7 +183,19 @@ function handleMessage(msg) {
     case "token":
       tokenCount++;
       setStatus(`Tokens: ${tokenCount}`);
+      if (msg.loop_count !== undefined) {
+        loopCountEl.textContent = `Loop: ${msg.loop_count}`;
+        loopCountEl.classList.remove("hidden");
+      }
       drawNotes(msg.notes ?? []);
+      break;
+
+    case "done":
+      setStatus(`Done (${tokenCount} tokens) — loop or send a new prompt`);
+      break;
+
+    case "silent":
+      setStatus("Silent");
       break;
 
     case "stopped":
@@ -115,7 +213,6 @@ function handleMessage(msg) {
 const FREQ_MIN = 20;
 const FREQ_MAX = 20000;
 
-// Distinct colours for clusters/instruments
 const CLUSTER_COLORS = [
   "#00d4aa", "#ff6b6b", "#ffd93d", "#6bcb77",
   "#4d96ff", "#ff922b", "#cc5de8", "#f06595",
@@ -134,7 +231,6 @@ function drawNotes(notes) {
 
   if (!notes.length) return;
 
-  // Find max amplitude for normalisation
   const maxAmp = Math.max(...notes.map(n => n.amplitude ?? 0), 1);
 
   for (const note of notes) {
@@ -142,7 +238,6 @@ function drawNotes(notes) {
     const amp  = (note.amplitude ?? 0) / maxAmp;
     const cluster = note.cluster ?? null;
 
-    // Log-scale frequency → X position
     const logMin = Math.log10(FREQ_MIN);
     const logMax = Math.log10(FREQ_MAX);
     const x = Math.round(((Math.log10(Math.max(freq, FREQ_MIN)) - logMin) / (logMax - logMin)) * W);
@@ -157,74 +252,72 @@ function drawNotes(notes) {
 
 // ── UI helpers ─────────────────────────────────────────────────────────────
 function setStatus(msg) {
-  statusEl.textContent = msg;
+  statusText.textContent = msg;
 }
 
 function setIdle() {
   isRunning = false;
   btnStart.disabled = false;
   btnStop.disabled  = true;
+  btnSend.disabled  = true;
 }
 
 function setRunning() {
   isRunning = true;
   tokenCount = 0;
+  loopCountEl.classList.add("hidden");
+  loopCountEl.textContent = "Loop: 0";
   btnStart.disabled = true;
   btnStop.disabled  = false;
+  btnSend.disabled  = false;
 }
 
 // ── Control wiring ─────────────────────────────────────────────────────────
-btnStart.addEventListener("click", () => {
+function startPipeline() {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
   setRunning();
   ws.send(JSON.stringify({ action: "start", params: collectParams() }));
-});
+}
+
+btnStart.addEventListener("click", startPipeline);
+btnSend.addEventListener("click", startPipeline);
 
 btnStop.addEventListener("click", () => {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
   ws.send(JSON.stringify({ action: "stop" }));
 });
 
-// Live param updates while running
 function sendParamUpdate(partial) {
   if (!isRunning || !ws || ws.readyState !== WebSocket.OPEN) return;
   ws.send(JSON.stringify({ action: "update_params", params: partial }));
 }
 
-layerInput.addEventListener("input", () => {
-  layerVal.textContent = layerInput.value;
-  sendParamUpdate({ layer: parseInt(layerInput.value) });
+modelSel.addEventListener("change", () => {
+  populateLayerWidth(modelSel.value);
+  sendParamUpdate({ model: modelSel.value });
 });
 
-clustersIn.addEventListener("input", () => {
-  clustersVal.textContent = clustersIn.value;
-  sendParamUpdate({ clusters: parseInt(clustersIn.value) });
-});
-
-maxTokensIn.addEventListener("input", () => {
-  maxTokensVal.textContent = maxTokensIn.value;
-  sendParamUpdate({ max_tokens: parseInt(maxTokensIn.value) });
-});
-
+layerSel.addEventListener("change", () => sendParamUpdate({ layer: parseInt(layerSel.value) }));
 widthSel.addEventListener("change", () => sendParamUpdate({ width: widthSel.value }));
-loopCb.addEventListener("change",   () => sendParamUpdate({ loop: loopCb.checked }));
 
-document.querySelectorAll("[data-strategy]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll("[data-strategy]").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    sendParamUpdate({ strategy: btn.dataset.strategy });
-  });
+strategySel.addEventListener("change", () => {
+  updateStrategyHelp();
+  syncClustersVisibility();
+  sendParamUpdate({ strategy: strategySel.value });
 });
 
-document.querySelectorAll("[data-mode]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll("[data-mode]").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    sendParamUpdate({ mode: btn.dataset.mode });
-  });
+clustersIn.addEventListener("input", () => sendParamUpdate({ clusters: parseInt(clustersIn.value) }));
+maxTokensIn.addEventListener("input", () => sendParamUpdate({ max_tokens: parseInt(maxTokensIn.value) }));
+
+modeSel.addEventListener("change", () => {
+  updateModeHelp();
+  syncBpmVisibility();
+  sendParamUpdate({ mode: modeSel.value });
 });
+
+bpmIn.addEventListener("input", () => sendParamUpdate({ bpm: parseInt(bpmIn.value) }));
+loopCb.addEventListener("change", () => sendParamUpdate({ loop: loopCb.checked }));
 
 // ── Init ───────────────────────────────────────────────────────────────────
-loadDefaults();
+loadOptions();
 connectWS();
