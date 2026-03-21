@@ -8,6 +8,17 @@ let catalogue = {};        // modelId -> { layers: [...], widths: [...] }
 let strategyDescs = {};    // value -> description
 let modeDescs = {};        // value -> description
 
+// ── Local storage ──────────────────────────────────────────────────────────
+const STORAGE_KEY = "sae_ui_params";
+
+function saveParams() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collectParams())); } catch {}
+}
+
+function loadSavedParams() {
+  try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; }
+}
+
 // ── DOM refs ───────────────────────────────────────────────────────────────
 const prompt          = document.getElementById("prompt");
 const btnSend         = document.getElementById("btn-send");
@@ -83,6 +94,9 @@ async function loadOptions() {
   } catch (e) {
     console.warn("Could not load defaults", e);
   }
+
+  const saved = loadSavedParams();
+  if (saved) applyParams(saved);
 }
 
 function populateLayerWidth(modelId) {
@@ -292,31 +306,36 @@ function sendParamUpdate(partial) {
   ws.send(JSON.stringify({ action: "update_params", params: partial }));
 }
 
+prompt.addEventListener("input", () => saveParams());
+
 modelSel.addEventListener("change", () => {
   populateLayerWidth(modelSel.value);
   sendParamUpdate({ model: modelSel.value });
+  saveParams();
 });
 
-layerSel.addEventListener("change", () => sendParamUpdate({ layer: parseInt(layerSel.value) }));
-widthSel.addEventListener("change", () => sendParamUpdate({ width: widthSel.value }));
+layerSel.addEventListener("change", () => { sendParamUpdate({ layer: parseInt(layerSel.value) }); saveParams(); });
+widthSel.addEventListener("change", () => { sendParamUpdate({ width: widthSel.value }); saveParams(); });
 
 strategySel.addEventListener("change", () => {
   updateStrategyHelp();
   syncClustersVisibility();
   sendParamUpdate({ strategy: strategySel.value });
+  saveParams();
 });
 
-clustersIn.addEventListener("input", () => sendParamUpdate({ clusters: parseInt(clustersIn.value) }));
-maxTokensIn.addEventListener("input", () => sendParamUpdate({ max_tokens: parseInt(maxTokensIn.value) }));
+clustersIn.addEventListener("input", () => { sendParamUpdate({ clusters: parseInt(clustersIn.value) }); saveParams(); });
+maxTokensIn.addEventListener("input", () => { sendParamUpdate({ max_tokens: parseInt(maxTokensIn.value) }); saveParams(); });
 
 modeSel.addEventListener("change", () => {
   updateModeHelp();
   syncBpmVisibility();
   sendParamUpdate({ mode: modeSel.value });
+  saveParams();
 });
 
-bpmIn.addEventListener("input", () => sendParamUpdate({ bpm: parseInt(bpmIn.value) }));
-loopCb.addEventListener("change", () => sendParamUpdate({ loop: loopCb.checked }));
+bpmIn.addEventListener("input", () => { sendParamUpdate({ bpm: parseInt(bpmIn.value) }); saveParams(); });
+loopCb.addEventListener("change", () => { sendParamUpdate({ loop: loopCb.checked }); saveParams(); });
 
 // ── Init ───────────────────────────────────────────────────────────────────
 loadOptions();
