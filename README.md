@@ -1,16 +1,58 @@
 # responsible-ai-sensification
-sensification of the output of gemma 3
 
-don't forget to login with huggingface to be able to download the model as well as accepting the gemma-3 license on huggingface
+Sensification of the output of Gemma 3 — turns SAE feature activations into live generative audio via a browser UI.
+
+> **Requires a HuggingFace login** and acceptance of the [Gemma 3 license](https://huggingface.co/google/gemma-3-1b-pt) before first use.
+
+## Quick Start (Web UI)
+
+```bash
+# Install system dependency for audio (only needed for CLI --live flag)
+sudo apt install libportaudio2
+
+# Start the server
+./scripts/start.sh
+
+# Open in browser
+http://localhost:8080
+```
+
+```bash
+# Stop the server
+./scripts/stop.sh
+```
+
+The browser UI is the primary interface. Set a prompt, choose model/strategy/layer/width/clusters/mode/BPM, then click **Start**. Parameters can be tweaked mid-generation without restarting.
+
+### Parameters
+
+| Parameter | Default | Description |
+|---|---|---|
+| **Prompt** | `Hello world` | Text prompt fed to the model |
+| **Model** | `google/gemma-3-1b-pt` | HuggingFace model (`gemma-3-1b-pt` or `gemma-3-4b-pt`) |
+| **Layer** | `22` | Transformer layer index to hook SAE onto |
+| **Width** | `65k` | SAE width |
+| **Strategy** | `identity` | `identity`: maps each feature directly to a frequency; `cluster`: groups features by semantic similarity (k-means on Neuronpedia embeddings) |
+| **Clusters** | `8` | Number of k-means clusters (cluster strategy only) |
+| **Mode** | `timed` | `timed`: notes play for a fixed BPM-derived duration; `sustain`: notes hold until the next token arrives |
+| **BPM** | `120` | Tempo for timed mode |
+| **Loop** | off | Replay generated tokens indefinitely after generation ends |
+
+### Verbose logging
+
+```bash
+./scripts/start.sh --verbose
+# or
+VERBOSE=1 ./scripts/start.sh
+```
+
+---
 
 ## Prerequisites
 
 ```bash
-# System library required for live audio playback (--live flag)
-sudo apt install libportaudio2
+sudo apt install libportaudio2   # required for CLI --live playback only
 ```
-
-source code : https://colab.research.google.com/drive/1NhWjg7n0nhfW--CjtsOdw5A5J_-Bzn4r#scrollTo=nOBcV4om7mrT
 
 ## Directory Layout
 
@@ -23,34 +65,26 @@ app/
   server/
     main.py        # FastAPI app factory
     session.py     # PipelineParams + PipelineSession
-    pipeline/      # Moved pipeline scripts
+    pipeline/
       extract.py
       transform.py
       synthesize.py
       audio_utils.py
       export.py
     routers/
-      config.py    # GET /api/config/defaults
+      config.py    # GET /api/config/defaults, GET /api/config/model-options
       stream.py    # WS /ws/stream
 scripts/
-  start.sh         # Start uvicorn server
-  stop.sh          # Kill uvicorn on port 8000
+  start.sh         # Start uvicorn on port 8080
+  stop.sh          # Kill uvicorn on port 8080
 specs/             # Feature specs + TODO backlog
 ```
 
-## Web Server
-
-```bash
-# Start the server and open http://localhost:8000
-./scripts/start.sh
-
-# Stop the server
-./scripts/stop.sh
-```
-
-The browser UI lets you set a prompt, choose strategy/layer/width/clusters, and click **Start** — all without touching the CLI. Parameters can be tweaked mid-generation.
+---
 
 ## CLI Tools
+
+The pipeline can also be used directly from the command line.
 
 ### extract.py
 
@@ -136,3 +170,7 @@ uv run python app/server/pipeline/extract.py "hello world" --stream --loop --max
 uv run python app/server/pipeline/transform.py runs/analysis.json --strategy cluster --clusters 8 \
   | uv run python app/server/pipeline/synthesize.py --live --mode timed
 ```
+
+---
+
+Source: https://colab.research.google.com/drive/1NhWjg7n0nhfW--CjtsOdw5A5J_-Bzn4r#scrollTo=nOBcV4om7mrT
