@@ -9,13 +9,17 @@ Usage:
 """
 import argparse
 import json
+import logging
 import sys
+import time
 from itertools import cycle
 from pathlib import Path
 
 import torch
 
 from app.server.pipeline.audio_utils import feature_to_frequency
+
+logger = logging.getLogger(__name__)
 
 INSTRUMENT_LIST = ["piano", "guitar", "bass", "strings", "pad", "bell", "flute", "brass"]
 CACHE_DIR = Path("neuronpedia_cache")
@@ -33,10 +37,16 @@ def build_cluster_map(
     cache_path = CACHE_DIR / f"{safe_model_id}_{layer}_{sae_width}_clusters_{n_clusters}.json"
 
     if cache_path.exists():
-        print("Loading cluster map from cache...", file=sys.stderr)
+        print(f"[transform] Loading cluster map from cache: {cache_path}", file=sys.stderr, flush=True)
+        logger.info("Loading cluster map from cache: %s", cache_path)
+        t0 = time.perf_counter()
         with open(cache_path) as f:
             raw = json.load(f)
-        return {int(k): v for k, v in raw.items()}
+        result = {int(k): v for k, v in raw.items()}
+        elapsed = time.perf_counter() - t0
+        print(f"[transform] Cluster map loaded: {len(result)} entries in {elapsed:.2f}s", file=sys.stderr, flush=True)
+        logger.info("Cluster map loaded: %d entries in %.2fs", len(result), elapsed)
+        return result
 
     np_cache = CACHE_DIR / f"{model_id}_{layer}_{sae_width}.jsonl"
     if not np_cache.exists():

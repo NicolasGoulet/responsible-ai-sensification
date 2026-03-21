@@ -7,6 +7,7 @@ Usage:
 """
 import argparse
 import gzip
+import itertools
 import json
 import re
 import sys
@@ -162,8 +163,11 @@ def load_sae(
     layer=22, width="65k", l0="medium", category="resid_post", device=device
 ) -> JumpReluSAE:
     path = f"{category}/layer_{layer}_width_{width}_l0_{l0}/params.safetensors"
+    print(f"[load_sae] Locating SAE weights from HuggingFace: {path}", file=sys.stderr, flush=True)
     local_path = hf_hub_download(repo_id="google/gemma-scope-2-1b-pt", filename=path)
+    print(f"[load_sae] SAE weights file: {local_path}", file=sys.stderr, flush=True)
     tensors = load_file(local_path)
+    print(f"[load_sae] SAE tensors loaded. Moving to device={device}...", file=sys.stderr, flush=True)
     sae = JumpReluSAE(
         w_enc=tensors["w_enc"],
         b_enc=tensors["b_enc"],
@@ -171,7 +175,9 @@ def load_sae(
         w_dec=tensors["w_dec"],
         b_dec=tensors["b_dec"],
     )
-    return sae.to(device).eval()
+    result = sae.to(device).eval()
+    print(f"[load_sae] SAE ready on {device}.", file=sys.stderr, flush=True)
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -195,8 +201,12 @@ def inspect_live(
     """
     inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
     input_ids = inputs["input_ids"].to(device)
+    print(f"[inspect_live] Starting generation loop (max_new_tokens={max_new_tokens or 'unlimited'}, input_len={input_ids.shape[1]})", file=sys.stderr, flush=True)
 
-    for _ in range(max_new_tokens):
+    _steps = range(max_new_tokens) if max_new_tokens > 0 else itertools.count()
+    for step in _steps:
+        if step == 0:
+            print("[inspect_live] Running first forward pass...", file=sys.stderr, flush=True)
         t0 = time.perf_counter()
         captured: list[torch.Tensor] = []
 
@@ -206,6 +216,8 @@ def inspect_live(
         hook = model.model.layers[layer].register_forward_hook(hook_fn)
         outputs = model(input_ids)
         hook.remove()
+        if step == 0:
+            print("[inspect_live] First forward pass complete.", file=sys.stderr, flush=True)
 
         hidden = captured[0]
         residual_last = hidden.squeeze(0)[-1, :]  # (d_model,)

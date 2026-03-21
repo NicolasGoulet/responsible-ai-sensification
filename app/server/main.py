@@ -1,7 +1,16 @@
 """main.py: FastAPI application factory."""
+import logging
+import os
 from pathlib import Path
 
 from fastapi import FastAPI
+
+_log_level = logging.DEBUG if os.environ.get("VERBOSE") == "1" else logging.INFO
+logging.basicConfig(
+    level=_log_level,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    force=True,
+)
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
