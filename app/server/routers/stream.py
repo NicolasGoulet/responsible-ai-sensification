@@ -14,6 +14,9 @@ router = APIRouter()
 # Module-level model cache: (model_id, layer, width) -> {"model": ..., "tokenizer": ..., "sae": ..., "neuronpedia": ...}
 _model_cache: dict[tuple, dict] = {}
 
+# Cluster map cache: (model_id, layer, width, clusters) -> cluster_map dict
+_cluster_cache: dict[tuple, dict] = {}
+
 # One shared session (single-user for now)
 _session = PipelineSession()
 
@@ -80,62 +83,88 @@ async def _run_pipeline(ws: WebSocket, params: PipelineParams) -> None:
 
         cluster_map: dict = {}
         if params.strategy == "cluster":
-            await _send(ws, {"type": "loading", "stage": "Building cluster map..."})
-
-            def _build_clusters():
-                np_model_id = params.model.split("/")[-1].replace("-pt", "")
-                return build_cluster_map(
-                    np_model_id,
-                    params.layer,
-                    params.width,
-                    params.clusters,
-                    "all-MiniLM-L6-v2",
-                )
-
-            cluster_map = await asyncio.to_thread(_build_clusters)
-
-        # Run generation in a thread
-        collected: list[dict] = []
-
-        def _generate():
-            results = []
-            for token_analysis, elapsed_ms in inspect_live(
-                params.prompt,
-                model,
-                tokenizer,
-                sae,
-                params.layer,
-                neuronpedia,
-                max_new_tokens=params.max_tokens,
-            ):
-                results.append((token_analysis, elapsed_ms))
-            return results
-
-        results = await asyncio.to_thread(_generate)
-
-        for token_analysis, elapsed_ms in results:
-            active_features = [f.model_dump() for f in token_analysis.active_features]
-            if params.strategy == "cluster":
-                notes = apply_cluster(active_features, cluster_map)
+            cluster_key = (params.model, params.layer, params.width, params.clusters)
+            if cluster_key in _cluster_cache:
+                cluster_map = _cluster_cache[cluster_key]
             else:
-                notes = apply_identity(active_features)
+                await _send(ws, {"type": "loading", "stage": "Building cluster map..."})
 
-            event = {
-                "type": "token",
-                "token": token_analysis.token,
-                "token_id": token_analysis.token_id,
-                "elapsed_ms": elapsed_ms,
-                "notes": notes,
-            }
-            collected.append(event)
-            await _send(ws, event)
+                def _build_clusters():
+                    np_model_id = params.model.split("/")[-1].replace("-pt", "")
+                    return build_cluster_map(
+                        np_model_id,
+                        params.layer,
+                        params.width,
+                        params.clusters,
+                        "all-MiniLM-L6-v2",
+                    )
 
-        # Loop mode: replay collected events
-        if params.loop:
+                cluster_map = await asyncio.to_thread(_build_clusters)
+                _cluster_cache[cluster_key] = cluster_map
+
+        # Producer + synthesizer: run generation concurrently with timed playback
+        queue: asyncio.Queue = asyncio.Queue()
+        collected: list[dict] = []
+        event_loop = asyncio.get_event_loop()
+
+        async def _producer():
+            def _generate():
+                for token_analysis, elapsed_ms in inspect_live(
+                    params.prompt, model, tokenizer, sae,
+                    params.layer, neuronpedia,
+                    max_new_tokens=params.max_tokens,
+                ):
+                    active_features = [f.model_dump() for f in token_analysis.active_features]
+                    if params.strategy == "cluster":
+                        notes = apply_cluster(active_features, cluster_map)
+                    else:
+                        notes = apply_identity(active_features)
+                    event = {
+                        "type": "token",
+                        "token": token_analysis.token,
+                        "token_id": token_analysis.token_id,
+                        "elapsed_ms": elapsed_ms,
+                        "notes": notes,
+                    }
+                    asyncio.run_coroutine_threadsafe(queue.put(event), event_loop).result()
+
+            await asyncio.to_thread(_generate)
+            await queue.put(None)  # sentinel: generation complete
+
+        async def _synthesizer():
+            # Initial playback: drain the queue
             while True:
-                for event in collected:
-                    await _send(ws, event)
-                    await asyncio.sleep(event["elapsed_ms"] / 1000)
+                event = await queue.get()
+                if event is None:
+                    break
+                collected.append(event)
+                await _send(ws, event)
+                if params.mode == "timed":
+                    await asyncio.sleep(60.0 / params.bpm)
+
+            await _send(ws, {"type": "done"})
+
+            # Post-generation: loop or idle until cancelled
+            loop_count = 0
+            was_looping = False
+            while True:
+                if params.loop:
+                    was_looping = True
+                    loop_count += 1
+                    for event in collected:
+                        if not params.loop:
+                            break
+                        await _send(ws, {**event, "loop_count": loop_count})
+                        if params.mode == "timed":
+                            await asyncio.sleep(60.0 / params.bpm)
+                else:
+                    if was_looping:
+                        was_looping = False
+                        await _send(ws, {"type": "silent"})
+                    await asyncio.sleep(0.1)
+
+        producer_task = asyncio.create_task(_producer())
+        await _synthesizer()
 
     except asyncio.CancelledError:
         raise

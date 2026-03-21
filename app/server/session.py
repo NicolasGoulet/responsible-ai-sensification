@@ -15,12 +15,17 @@ class PipelineParams:
     clusters: int = 8
     loop: bool = False
     mode: str = "timed"          # "timed" | "sustain"
+    bpm: int = 120
 
     def update(self, **kwargs) -> None:
         """Merge a dict of partial params into this instance."""
         for key, value in kwargs.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
+            if not hasattr(self, key) or value is None:
+                continue
+            current = getattr(self, key)
+            if type(current) is int:
+                value = int(value)
+            setattr(self, key, value)
 
 
 @dataclass
