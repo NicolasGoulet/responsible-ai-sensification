@@ -13,7 +13,25 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Sequence
 
-from app.server.pipeline.tonality import DEFAULT_EMBED_MODEL, KeyEmbeddingCache, load_key_embedding_cache
+from app.server.pipeline.tonality import DEFAULT_EMBED_MODEL
+
+
+@dataclass(frozen=True)
+class CachedTonalityEmbedding:
+    key: str
+    description: str
+    embedding: list[float]
+
+
+@dataclass(frozen=True)
+class CachedTonalityEmbeddings:
+    name: str
+    source: str
+    description: str
+    embed_model: str
+    dimensions: int
+    content_hash: str
+    keys: list[CachedTonalityEmbedding]
 
 
 @dataclass(frozen=True)
@@ -29,6 +47,38 @@ class TonalityMatchResult:
     embed_model: str
     top_k: int
     matches: list[TonalityMatch]
+
+
+def load_cached_tonalities(path: str | Path) -> CachedTonalityEmbeddings:
+    """Load a precomputed tonality embedding cache from JSON.
+
+    This loader intentionally lives in the matcher module so the runtime browser path does
+    not depend on helper functions being present in `tonality.py` on every branch.
+    """
+    with open(path) as f:
+        raw = json.load(f)
+
+    keys_raw = raw.get("keys")
+    if not isinstance(keys_raw, list) or not keys_raw:
+        raise ValueError("Tonality cache must contain a non-empty 'keys' list")
+
+    keys = [
+        CachedTonalityEmbedding(
+            key=str(entry["key"]),
+            description=str(entry["description"]),
+            embedding=[float(x) for x in entry["embedding"]],
+        )
+        for entry in keys_raw
+    ]
+    return CachedTonalityEmbeddings(
+        name=str(raw.get("name") or ""),
+        source=str(raw.get("source") or ""),
+        description=str(raw.get("description") or ""),
+        embed_model=str(raw.get("embed_model") or DEFAULT_EMBED_MODEL),
+        dimensions=int(raw.get("dimensions") or (len(keys[0].embedding) if keys else 0)),
+        content_hash=str(raw.get("content_hash") or ""),
+        keys=keys,
+    )
 
 
 def embed_prompt(prompt: str, embed_model: str = DEFAULT_EMBED_MODEL) -> list[float]:
@@ -53,7 +103,7 @@ def _cosine_similarity(a: Sequence[float], b: Sequence[float]) -> float:
 
 def rank_tonalities(
     prompt_embedding: Sequence[float],
-    cache: KeyEmbeddingCache,
+    cache: CachedTonalityEmbeddings,
     top_k: int = 3,
 ) -> list[TonalityMatch]:
     """Return the top-k closest tonalities for a prompt embedding.
@@ -85,7 +135,7 @@ def match_prompt_to_tonalities(
     embed_model: str | None = None,
 ) -> TonalityMatchResult:
     """Embed the prompt and return the k most similar tonalities."""
-    cache = load_key_embedding_cache(cache_path)
+    cache = load_cached_tonalities(cache_path)
     model_name = embed_model or cache.embed_model or DEFAULT_EMBED_MODEL
     prompt_embedding = embed_prompt(prompt, embed_model=model_name)
     matches = rank_tonalities(prompt_embedding, cache, top_k=top_k)
@@ -120,3 +170,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

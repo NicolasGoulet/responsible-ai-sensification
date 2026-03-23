@@ -102,6 +102,35 @@ def load_key_descriptions(path: str | Path | None = None) -> KeyDescriptionSet:
     return _coerce_description_set(raw)
 
 
+def load_key_embedding_cache(path: str | Path) -> KeyEmbeddingCache:
+    """Load a precomputed key-embedding cache from JSON."""
+    with open(path) as f:
+        raw = json.load(f)
+
+    keys_raw = raw.get("keys")
+    if not isinstance(keys_raw, list) or not keys_raw:
+        raise ValueError("Embedding cache must contain a non-empty 'keys' list")
+
+    keys = [
+        KeyEmbeddingEntry(
+            key=str(entry["key"]),
+            description=str(entry["description"]),
+            embedding=[float(x) for x in entry["embedding"]],
+        )
+        for entry in keys_raw
+    ]
+
+    return KeyEmbeddingCache(
+        name=str(raw.get("name") or ""),
+        source=str(raw.get("source") or ""),
+        description=str(raw.get("description") or ""),
+        embed_model=str(raw.get("embed_model") or DEFAULT_EMBED_MODEL),
+        dimensions=int(raw.get("dimensions") or (len(keys[0].embedding) if keys else 0)),
+        content_hash=str(raw.get("content_hash") or ""),
+        keys=keys,
+    )
+
+
 def _description_set_hash(key_set: KeyDescriptionSet) -> str:
     payload = json.dumps(
         {
