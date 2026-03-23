@@ -3,6 +3,7 @@ import asyncio
 import dataclasses
 import json
 import logging
+import math
 import sys
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
@@ -24,6 +25,54 @@ _session = PipelineSession()
 
 async def _send(ws: WebSocket, msg: dict) -> None:
     await ws.send_text(json.dumps(msg))
+
+
+def _midi_to_frequency(midi_note: int) -> float:
+    """Convert a MIDI note number to frequency in Hz."""
+    return 440.0 * math.pow(2.0, (midi_note - 69) / 12.0)
+
+
+def _apply_browser_pitch_policy(
+    notes: list[dict],
+    active_features: list[dict],
+    tonal_context,
+    *,
+    token: str,
+    token_id: int,
+    l0: int,
+    elapsed_ms: int,
+):
+    """Mutate browser notes in place using the prompt-level tonal context.
+
+    This keeps the browser path changes localized in stream.py for now. The CLI path is
+    intentionally left unchanged until we decide how to pass prompt-level tonal context
+    through the CLI pipeline.
+    """
+    if tonal_context is None:
+        return notes
+
+    from app.server.pipeline.pitch_policy import TokenPitchInput, choose_pitch
+
+    for feature, note in zip(active_features, notes, strict=False):
+        decision = choose_pitch(
+            tonal_context,
+            TokenPitchInput(
+                feature_index=feature["index"],
+                activation=feature["activation"],
+                token_id=token_id,
+                token=token,
+                cluster=note.get("cluster"),
+                instrument=note.get("instrument"),
+                l0=l0,
+                elapsed_ms=elapsed_ms,
+            ),
+        )
+        note["freq"] = _midi_to_frequency(decision.chosen_midi)
+        note["pitch_midi"] = decision.chosen_midi
+        note["raw_pitch_midi"] = decision.raw_midi
+        note["used_scale_bias"] = decision.used_scale_bias
+        note["key_name"] = decision.key_name
+    return notes
 
 
 async def _run_pipeline(ws: WebSocket, params: PipelineParams) -> None:
@@ -84,6 +133,40 @@ async def _run_pipeline(ws: WebSocket, params: PipelineParams) -> None:
                 "neuronpedia": neuronpedia,
             }
 
+        tonal_context = None
+        try:
+            from app.server.pipeline.tonality import DEFAULT_CACHE_DIR
+            from app.server.pipeline.tonality_matcher import match_prompt_to_tonalities
+            from app.server.pipeline.pitch_policy import TonalityContext
+
+            cache_path = DEFAULT_CACHE_DIR / "schubart_default_all-MiniLM-L6-v2.json"
+            if cache_path.exists():
+                await _send(ws, {"type": "loading", "stage": "Choosing tonality..."})
+                tonality_result = await asyncio.to_thread(
+                    match_prompt_to_tonalities,
+                    params.prompt,
+                    cache_path,
+                    3,
+                    None,
+                )
+                tonal_context = TonalityContext(matches=tonality_result.matches)
+                tonality_summary = ", ".join(
+                    f"{match.key} ({match.score:.3f})" for match in tonality_result.matches
+                )
+                print(f"[pipeline] Tonality matches: {tonality_summary}", file=sys.stderr, flush=True)
+                logger.info("Tonality matches selected: %s", tonality_summary)
+                await _send(
+                    ws,
+                    {
+                        "type": "tonality",
+                        "matches": [dataclasses.asdict(match) for match in tonality_result.matches],
+                    },
+                )
+            else:
+                logger.info("Tonality cache missing at %s; browser tonal matching skipped", cache_path)
+        except Exception:
+            logger.exception("Tonality matching failed; continuing without browser tonal bias")
+
         await _send(ws, {"type": "loading", "stage": "Running generation..."})
 
         from app.server.pipeline.extract import inspect_live
@@ -143,6 +226,17 @@ async def _run_pipeline(ws: WebSocket, params: PipelineParams) -> None:
                             notes = apply_cluster(active_features, cluster_map)
                         else:
                             notes = apply_identity(active_features)
+
+                        notes = _apply_browser_pitch_policy(
+                            notes,
+                            active_features,
+                            tonal_context,
+                            token=token_analysis.token,
+                            token_id=token_analysis.token_id,
+                            l0=token_analysis.l0,
+                            elapsed_ms=elapsed_ms,
+                        )
+
                         event = {
                             "type": "token",
                             "token": token_analysis.token,
