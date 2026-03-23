@@ -172,6 +172,8 @@ const btnStop         = document.getElementById("btn-stop");
 const statusEl        = document.getElementById("status");
 const statusText      = document.getElementById("status-text");
 const loopCountEl     = document.getElementById("loop-count-display");
+const tonalityPanel   = document.getElementById("tonality-panel");
+const tonalityList    = document.getElementById("tonality-list");
 const canvas          = document.getElementById("waveform");
 const ctx             = canvas.getContext("2d");
 
@@ -329,6 +331,44 @@ function connectWS() {
   ws.onclose = () => { ws = null; setIdle(); };
 }
 
+function renderTonalityMatches(matches) {
+  tonalityList.innerHTML = "";
+
+  if (!matches.length) {
+    tonalityPanel.classList.add("hidden");
+    return;
+  }
+
+  matches.slice(0, 3).forEach((match) => {
+    const item = document.createElement("li");
+    const score = Number.isFinite(match.score) ? match.score.toFixed(3) : "n/a";
+
+    const keyEl = document.createElement("span");
+    keyEl.className = "tonality-key";
+    keyEl.textContent = match.key ?? "Unknown key";
+
+    const scoreEl = document.createElement("span");
+    scoreEl.className = "tonality-score";
+    scoreEl.textContent = score;
+
+    const descriptionEl = document.createElement("div");
+    descriptionEl.className = "tonality-description";
+    descriptionEl.textContent = match.description ?? "";
+
+    item.appendChild(keyEl);
+    item.appendChild(scoreEl);
+    item.appendChild(descriptionEl);
+    tonalityList.appendChild(item);
+  });
+
+  tonalityPanel.classList.remove("hidden");
+}
+
+function clearTonalityMatches() {
+  tonalityList.innerHTML = "";
+  tonalityPanel.classList.add("hidden");
+}
+
 function handleMessage(msg) {
   switch (msg.type) {
     case "ready":
@@ -339,6 +379,15 @@ function handleMessage(msg) {
     case "loading":
       setStatus(msg.stage);
       break;
+
+    case "tonality": {
+      const matches = msg.matches ?? [];
+      renderTonalityMatches(matches);
+      if (matches.length > 0) {
+        setStatus(`Tonality: ${matches[0].key}`);
+      }
+      break;
+    }
 
     case "token":
       tokenCount++;
@@ -428,6 +477,7 @@ function setIdle() {
 function setRunning() {
   isRunning = true;
   tokenCount = 0;
+  clearTonalityMatches();
   loopCountEl.classList.add("hidden");
   loopCountEl.textContent = "Loop: 0";
   btnStart.disabled = true;

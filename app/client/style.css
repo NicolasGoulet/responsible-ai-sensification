@@ -200,6 +200,49 @@ select:focus {
   word-break: break-word;
 }
 
+
+.tonality-panel {
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.tonality-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.tonality-list {
+  margin-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tonality-list li {
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.tonality-key {
+  font-weight: 600;
+}
+
+.tonality-score {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  margin-left: 6px;
+}
+
+.tonality-description {
+  color: var(--text-muted);
+}
+
 /* ── Utilities ── */
 .hidden { display: none !important; }
 
