@@ -150,6 +150,11 @@ async def _run_pipeline(ws: WebSocket, params: PipelineParams) -> None:
                     None,
                 )
                 tonal_context = TonalityContext(matches=tonality_result.matches)
+                tonality_summary = ", ".join(
+                    f"{match.key} ({match.score:.3f})" for match in tonality_result.matches
+                )
+                print(f"[pipeline] Tonality matches: {tonality_summary}", file=sys.stderr, flush=True)
+                logger.info("Tonality matches selected: %s", tonality_summary)
                 await _send(
                     ws,
                     {
